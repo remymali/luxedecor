@@ -1,0 +1,193 @@
+<!-- --include header-- -->
+<%- include("../../layout/layout")%>
+<%- include("../../partials/user-header")%>
+<!-- /header -->
+<div class="container ">
+    <div class="row p-4 mb-4">
+        <div class="container col-lg-3 col-md-3 col-12 p-3 m-0">
+            <div class="container bg-white profile_left p-5">
+                <div class="mb-4 d-flex flex-column">
+                    <h6>Manage My Account</h6>
+                    <a href="/profile" class="text-decoration-none">My Profile</a>
+                </div>
+                <div class="mb-4 d-flex flex-column">
+                    <h6>My Orders</h6>
+                    <a href="/order" class="text-decoration-none">My Orders</a>
+                    <a href="/wallet" class="text-decoration-none">My Wallet</a>
+                </div>
+                <div class="mb-4 d-flex flex-column">
+                    <h6>My Address</h6>
+                    <a href="#" class="text-decoration-none  text-danger">My Address</a>
+                </div>
+            </div>
+        </div>
+        <div class="container col-lg-9 col-md-9 col-12 py-3 p-0 m-0">
+            <div class="container-fluid bg-white profile_Right p-4">
+                <div class="p-3">
+                    <h5 class=" fw-bold">My Address</h5>
+                </div>
+                <div class="row px-3">
+                    <div class="container p-0 m-0 px-1">
+                        <div class="address_Form p-4">
+                            <form action="/editAddress" method="post">
+                            <div class="address_bg bg-white p-3" style="border-radius: 12px;">
+                                <% if(userAdress.length == 0){%>
+                                    <div class="bg-white p-2  d-flex align-items-center justify-content-center"  style="position: relative;">
+                                        <h2  style="color: #9a9a9a; opacity: 50%;" >No Address Found !</h2>
+                                        <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_uio5iafn.json"  background="transparent"
+                                          speed="1"  style="width: 150px; "  loop  autoplay>
+                                        </lottie-player>
+
+                                    </div>
+                                    <%}else{%>
+                                        <div class="bg-white p-2 address_selecter">
+                                            <% userAdress.forEach((data,index)=>{%>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <input type="radio" name="selectedAddress" value="<%=data._id%>" required>
+                                                <h6>Select Address</h6>
+                                            </div>
+                                            <div class="address p-2 px-3">
+                                                <span style="color: #9a9a9a; font-size: 13.5px;">
+                                                    <Span><%=data.name%>, </Span>
+                                                    <Span><%=data.houseName%>, </Span>
+                                                    <Span><%=data.street%>,</Span>
+                                                    <Span><%=data.city%>,</Span>
+                                                    <Span><%=data.state%>,</Span> 
+                                                    <br>
+                                                    <Span>Ph :<%=data.phone%>,</Span>
+                                                    <Span>Pin :<%=data.postalCode%></Span>
+                                                </span>
+                                            </div>
+                                            <%})%>
+                                        </div>
+                                        <%}%>
+                                  </div>
+                                <div class="pt-3 address_view d-flex justify-content-end">
+                                    <button class="btn btn-danger p-2" type="submit">
+                                        Edit Address
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="py-3 pt-4">
+                        <h5 class=" fw-bold">Add New Address</h5>
+                    </div>
+                    <div class="container p-0 m-0 px-1 pb-3">
+                        <div class="address_Form p-4">
+                            <form action="/addNewAddress" method="post">
+                                <div class="row d-flex">
+                                    <div class="col-lg-6 col-12 d-flex flex-column p-2 gap-2 ">
+                                        <label for="">Full Name*</label>
+                                        <input type="text" name="name" required>
+                                    </div>
+                                    <div class="col-lg-6 col-12 d-flex flex-column p-2 gap-2 ">
+                                        <label for="">House Name*</label>
+                                        <input type="text" name="houseName" required>
+                                    </div>
+                                </div>
+                                <div class="row d-flex">
+                                    <div class="d-flex col-lg-6 col-12 flex-column p-2 gap-2 ">
+                                        <label for="">Street*</label>
+                                        <input type="text" name="street" required>
+                                    </div>
+                                    <div class="d-flex col-lg-6 col-12 flex-column p-2 gap-2 ">
+                                        <label for="">Town/City*</label>
+                                        <input type="text" name="city" required>
+                                    </div>
+                                </div>
+                                <div class="d-flex row">
+                                    <div class="d-flex col-lg-6 flex-column p-2 gap-2 ">
+                                        <label for="">State*</label>
+                                        <input type="text" name="state" required>
+                                    </div>
+                                    <div class="d-flex col-lg-6 flex-column p-2 gap-2 ">
+                                        <label for="">Phone*</label>
+                                        <input type="number" name="phone" required>
+                                    </div>
+                                </div>
+                                <div class="row f-flex align-items-end">
+                                    <div class="d-flex col-lg-6 flex-column p-2 gap-2 ">
+                                        <label for="">pin*</label>
+                                        <input type="number" name="postalCode" required>
+                                    </div>
+                                    <div class="p-2 col-lg-6 billing_button">
+                                        <button class="btn btn-danger p-2" type="submit">
+                                            Add New Address
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /* --------------profile----------------- */
+ .profile_left {
+  border-radius: 13px;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.profile_left a {
+  font-size: 13px;
+  color: var(--primaryText);
+  cursor: pointer;
+}
+.profile_left a:hover {
+  color: var(--primaryBg);
+}
+.profile_Right {
+  border-radius: 13px;
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.propic img {
+  width: 15%;
+  max-height: 120px;
+  border-radius: 50%;
+}
+.propic p {
+  font-size: 13.5px;
+  color: #959595;
+}
+.propic span {
+  font-size: 13.5px;
+  color: #959595;
+}
+
+.profile_info {
+  border-radius: 13px;
+  box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.05);
+  background: var(--primaryBgColllor);
+}
+
+.profile_form label {
+  font-size: 13.5px;
+  color: #373a47;
+}
+.profile_form input {
+  background-color: #fffefe;
+  border-radius: 5px;
+  border: none;
+  padding: 7px;
+  padding-left: 10px;
+}
+.profile_form input::placeholder {
+  font-size: 13.5px;
+  color: #959595;
+}
+.profile_form input:focus {
+  outline: none;
+  font-size: 13px;
+  background-color: #fffefe;
+}
+.profile_button button {
+  width: 20%;
+}
+
+</style>
+<!-- --include footer-- -->
+<%- include("../../partials/footer")%>
+<!-- /footer -->

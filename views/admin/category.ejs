@@ -1,0 +1,91 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+    <%- include("../partials/admin-header")%>
+        <!-- /header -->
+        <section>
+            <div class="container">
+                <div class="row mt-5 ">
+                    <table id="sample" class="table table-striped table-bordered" style="width:100%">
+
+                        <thead>
+
+
+                            <tr>
+                                <th colspan="5">USER DATA collectors</th>
+                                <th colspan="2"><a href="../admin/createCategory"
+                                        class="btn btn-success float-right">CREATE</a></th>
+                            </tr>
+
+
+                            <tr>
+                                <th colspan="1">Category Name</th>
+                                <th colspan="3">Description</th>
+                                <th colspan="2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% data.forEach((element,index)=> { %>
+                                <tr>
+                                    <td colspan="1">
+                                        <%=element.categoryName %>
+                                    </td>
+                                    <td colspan="3">
+                                        <%=element.description %>
+                                    </td>
+
+                                    <td colspan="1">
+                                        <% if(element.isAvailable===true){%>
+                                            <form action="/admin/unlistCategory/<%= element._id %>" method="POST">
+                                                <button class="btn btn-danger m-2 text" type="submit"  onclick="confirmAlert(this.form)">Unlist</button>
+                                            </form>
+                                            <% } else if(element.isAvailable===false){%>
+                                                <form action="/admin/listCategory/<%= element._id %>" method="POST">
+                                                    <button class="btn btn-danger m-2 text" type="submit"  onclick="confirmAlert(this.form)">list</button>
+                                                </form>
+                                                <%}%>
+                                    </td>
+                                    <td colspan="1">
+                                        <form action="/admin/categoryEdit/<%= element._id %>" method="get">
+                                            <button class="btn btn-danger m-2 text " type="submit"  onclick="confirmAlert(this.form)">edit</button>
+                                        </form>
+                                    </td>
+
+                                    <!-- <td>
+                    <% element._id %>
+                </td> -->
+                                </tr>
+                                <% }) %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <!-- --include header-- -->
+        <%- include("../partials/adminFooter")%>
+            <!-- /header -->
+
+            <script>
+     
+                function confirmAlert(form) {
+                    event.preventDefault();
+                    swal({
+                        title: "Are you sure?",
+                        text: "Do you want to proceed",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                // Allow the form to submit
+                                    form.submit();
+                                // swal("Poof! This user has been blocked!", {
+                                //     icon: "success",
+                                // });
+                            } else {
+                                swal("No changes made!");
+                            }
+                        });
+                }
+</script>

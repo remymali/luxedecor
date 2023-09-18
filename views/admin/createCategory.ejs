@@ -1,0 +1,113 @@
+
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+<%- include("../partials/admin-header")%>
+<!-- /header -->
+
+<%if(message.length){%>
+  <div id="errorMessage" class="alert alert-success text-center" style="font-weight: bold;font-size: large;">
+      <%= message %>
+  </div>
+  <%}%>
+
+<section>
+  <div class="container mt-4 mb-5">
+      <div class="row ">
+          <div class="col-md-6 mx-auto ">
+              <div class="bg-light-title text-center py-3 mb-3">
+                  <h2 class="mx-auto w-100">Create Category</h2>
+              </div>
+
+                    <form method="POST" action="/admin/createCategory">
+
+                       
+
+                      <div class="mb-3">
+                            
+                            <label class="form-label" for="name">Category Name</label>
+                            <input type="categoryName"  id="categoryName" name="categoryName"
+                                class="form-control form-control" />
+                                <small class="error text-danger" id="categoryNameError"></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="description">Description</label>
+                            <textarea type="description" id="description" name="description" class="form-control form-control" />
+                            </textarea>
+                            <small class="error text-danger" id="descriptionError"></small>
+                        </div>
+                        <div class="mb-3">
+                            <!-- <input type="isAvailable" required id="isAvailable" name="isAvailable"
+                                class="form-control form-control-lg" /> -->
+                                <label class="form-label" for="isAvailable">isAvailable</label><br>
+                                <input type="radio" id="Yes" name="fav_language" value="true">
+                                <label for="Yes">Yes</label><br>
+                                <input type="radio" id="No" name="fav_language" value="false">
+                                <label for="No">No</label><br>
+                                <small class="error text-danger" id="isAvailableError"></small>
+                            
+                        </div>
+
+                        <div class="mb-3 d-flex justify-content-center">
+                            <button class="btn btn-dark btn-lg btn-block" type="submit">Create</button>
+                        </div>
+
+                      
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- --include footer-- -->
+    <%- include("../partials/adminFooter")%>
+
+<!-- Your existing HTML code -->
+
+<!-- Your existing HTML code -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const form = document.querySelector("form");
+  
+      form.addEventListener("submit", function(event) {
+        // Prevent the form from submitting automatically
+        event.preventDefault();
+  
+        // Get form inputs
+        const categoryName = document.getElementById("categoryName");
+        const description = document.getElementById("description");
+        const isAvailableYes = document.getElementById("Yes");
+        const isAvailableNo = document.getElementById("No");
+  
+        // Get error elements
+        const errorElements = document.querySelectorAll(".error");
+  
+        // Clear any previous error messages
+        errorElements.forEach(element => {
+          element.textContent = "";
+        });
+  
+        // Validate inputs
+        if (categoryName.value.trim() === "") {
+          errorElements[0].textContent = "Category Name is required.";
+          categoryName.focus();
+          return;
+        }
+  
+        if (description.value.trim() === "") {
+          errorElements[1].textContent = "Description is required.";
+          description.focus();
+          return;
+        }
+  
+        if (!isAvailableYes.checked && !isAvailableNo.checked) {
+          errorElements[2].textContent = "Please select whether the category is available or not.";
+          return;
+        }
+  
+        // If all validations pass, submit the form
+        form.submit();
+      });
+    });
+  </script>
+  

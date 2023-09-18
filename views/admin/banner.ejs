@@ -1,0 +1,71 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+<%- include("../partials/admin-header")%>
+<!-- /header -->
+<section>
+   <div class="container">
+       <div class="row mt-5 ">
+        <div class="text-center">
+            <a href="/admin/bannerAdding">
+                <button class="btn btn-primary text-green" type="button" value="Search">Add-Banner</button>
+            </a>
+        </div>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+               
+                <th scope="col">BannerName</th>
+                <th scope="col">Description</th>
+                <th scope="col">Images</th>
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% banners.forEach((banner,index)=>{ %>
+            <tr>
+                <!-- <th scope="row">1</th> -->
+                <td><%= banner.bannerName %></td>
+                <td><%= banner.description %></td>
+                <td> <img style="width: 50px; height: 50px;" src="/banner/<%= banner.images[0]%>" alt="<%= banner.bannerName %>"></td>
+                
+                <td colspan="1"><form action="/admin/bannerDelete/<%= banner._id %>" 
+                    method="post">
+                    <button class="btn btn-danger m-2 text"
+                        type="submit" onclick="confirmAlert(this.form)">Remove</button>
+                </form>
+               
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+</section>
+
+<!-- --include footer-- -->
+<%- include("../partials/adminFooter")%>
+<!-- /header -->
+<script>
+
+function confirmAlert(form) {
+                    event.preventDefault();
+                    swal({
+                        title: "Are you sure?",
+                        text: "Do you want to proceed",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                // Allow the form to submit
+                                    form.submit();
+                                // swal("Poof! This user has been blocked!", {
+                                //     icon: "success",
+                                // });
+                            } else {
+                                swal("No changes made!");
+                            }
+                        });
+                }
+</script>

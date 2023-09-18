@@ -1,0 +1,89 @@
+<%- include("../layout/layout")%>
+<%- include("../partials/user-header")%>
+
+<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="2000" style="margin-top:0;">
+    <div class="carousel-inner">
+        <% banners.forEach((data, index) => { %>
+        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+          <img style="width: 100%; height: 500px;" src="/banner/<%= data.images %>" alt="<%= data.name %>" />
+          <!-- <div class="carousel-caption" style="margin-bottom: 350px;">
+            Add your text elements here
+            <h1>hello man</h1>
+            <p>hi man this is  onam offers</p>
+            You can style the text elements using CSS as needed
+          </div> -->
+          <div class="carousel-caption" style="margin-top: 350px; margin-right: 600px;">
+            <!-- Add your "Show" button here with a link to the product page -->
+            <a href='<%= data.url %>'> <!-- Assuming bannerId is the ID of the product page -->
+                <button class="btn btn-warning">Shop Now</button>
+            </a>
+            <!-- You can style the button using CSS as needed -->
+        </div>
+        </div>
+      <% }); %>
+       
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="container">
+    <hr class="line bg-dark mt-5">
+</div>
+
+<div class="container d-flex p-3 justify-content-between">
+    <a href="/Shop"><button class="productviewButton">View All Products</button></a>
+</div>
+
+<section style="background-color: #e5eef6;">
+    <div class="container py-5">
+        <h4 class="text-center mt-4 mb-5"><strong>Furniture New Arrival</strong></h4>
+        <div class="row">
+            <% products.forEach(element =>  {%>
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                <div class="card product-card">
+                    <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                        <a href="/detaildView/<%= element._id %>">
+                            <img src="../../productImages/<%= element.images[0] %>" alt="Card image cap" class="w-100" />
+                        </a>
+                        <div class="mask">
+                            <div class="d-flex justify-content-start align-items-end h-100">
+                                <h5><span class="badge bg-primary ms-2">New</span></h5>
+                            </div>
+                        </div>
+                        <div class="hover-overlay">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"><%= element.p_name %></h5>
+                        <p class="card-text text-dark">Price ₹ <%= element.price %></p>
+                        <div class="d-flex justify-content-between mb-2">
+                            <p class="text-muted mb-0">Available: <span class="fw-bold">5</span></p>
+                            <div class="ms-auto text-warning">
+                                <i class="fa fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-right">
+                            <a href="#" class="btn btn-primary me-2"><i class="fa-regular fa-heart"></i></a>
+                            <a href="#" class="btn btn-info"><i class="fa-sharp fa-solid fa-cart-shopping"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<%- include("../partials/footer")%>

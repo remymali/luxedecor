@@ -1,0 +1,326 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+  <%- include("../partials/user-header")%>
+    <!-- /header -->
+
+    <div class="container">
+      <div class="row">
+
+        <!-- BEGIN FILTERS -->
+        <div class="col-md-4 pt-3 bg-light">
+          <h3 class="grid-title large text-danger"><i class="fa fa-filter fa-xs text-danger"></i> Filters</h3>
+          <hr>
+          <div class="filterBox d-flex justify-content-between p-3">
+            <span style="font-weight: 550;">FILTER</span>
+            <span style="font-weight: 550;">
+                <a class="btn btn-secondary btn-sm"  style="text-decoration: none;" href="">
+                    Clear Filter
+                </a>
+            </span>
+        </div>
+        
+        
+          <!-- <form id="applyFilter"> -->
+          <!-- BEGIN FILTER BY CATEGORY -->
+          <h4>Category:</h4>
+
+          <%if(category.length < 7){%>
+            <div class="px-2 pt-2 filterFont" style="max-height: 150px; overflow-y: auto;">
+              <%category.forEach((data,index)=>{%>
+                <div class="">
+
+                  <input type="checkbox" id="category-<%= data.categoryName %>" value="<%= index %>"
+                    class="category-checkbox">
+                  <label for="category-<%= index %>">
+                    <%=data.categoryName%>
+                  </label>
+                </div>
+                <%})%>
+            </div>
+            <%}%>
+
+              <!-- END FILTER BY CATEGORY -->
+
+              <div class="padding"></div>
+
+
+              <hr>
+
+              <!-- BEGIN FILTER BY PRICE -->
+
+
+              <div class="container filterCo">
+                <H5>Price</H5>
+                <div class=" pt-2 filterFont" style="max-height: 150px; overflow-y: auto;">
+                  <select id="sortSelect">
+                    <option value="latest">Select</option>
+                    <option value="heighToLow">Heigher To Lower</option>
+                    <option value="lowToHigh">Lower To Heigher</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-5">
+                <button id="apply-filter-button" class="btn btn-primary">Apply Filter</button>
+              </div>
+              <!-- </form> -->
+              <!-- END FILTER BY PRICE -->
+
+              <!-- END FILTERS -->
+
+              <div class="padding"></div>
+              <!--Rate Range -->
+              <!-- line -->
+              <div class="container">
+                <hr class="line bg-dark">
+              </div>
+             
+
+        </div>
+        <!-- END FILTERS -->
+        <!-- BEGIN RESULT -->
+        <div class="col-md-8">
+
+          <div class="container">
+            <!-- line -->
+            <div class="container">
+              <hr class="line bg-dark">
+            </div>
+            <section style="background-color: #f8f9fa;">
+    <div class="container py-4">
+        <h4 class="text-center mb-4" style="font-weight: 1000;"><strong>Shop</strong></h4>
+        <div class="row col-12 g-4" id="product-container">
+            <% products.forEach(element => { %>
+                <div class="col">
+                    <div class="card product-card mb-3">
+                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                            <a href="/detaildView/<%= element._id %>">
+                                <img src="../../productImages/<%= element.images[2] %>" alt="Card image cap" class="w-100" />
+                            </a>
+                            <div class="mask">
+                                <div class="d-flex justify-content-start align-items-end h-100">
+                                    <h5><span class="badge bg-primary ms-2">New</span></h5>
+                                </div>
+                            </div>
+                            <div class="hover-overlay">
+                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= element.p_name %></h5>
+                            <p class="card-text text-dark">Price ₹ <%= element.price %></p>
+                            <div class="d-flex justify-content-between mb-2">
+                                <p class="text-muted mb-0">Available: <span class="fw-bold">5</span></p>
+                                <div class="ms-auto text-warning">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <a href="#" class="btn btn-primary me-2"><i class="far fa-heart"></i></a>
+                                <a href="#" class="btn btn-info"><i class="fas fa-cart-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+          </div>
+
+          <div id="pagination-container" class="d-flex align-items-center justify-content-center w-100 mt-5">
+            <nav aria-label="..." class="d-flex align-items-center justify-content-center">
+              <ul class="pagination">
+                <% if (currentPage> 1) { %>
+                  <li class="page-item text-dark">
+                    <a class="page-link" href="/shop?page=<%= currentPage - 1 %>" tabindex="-1">
+                      Previous
+                    </a>
+                  </li>
+                  <% } %>
+                    <% for (let page=1; page <=totalPages; page++) { %>
+                      <% if (page===currentPage) { %>
+                        <li class="page-item active">
+                          <a class="page-link" href="/shop?page=<%= page %>">
+                            <%= page %>
+                          </a>
+                        </li>
+                        <% } else { %>
+                          <li class="page-item">
+                            <a class="page-link" href="/shop?page=<%= page %>">
+                              <%= page %>
+                            </a>
+                          </li>
+                          <% } %>
+                            <% } %>
+                              <% if (currentPage < totalPages) { %>
+                                <li class="page-item">
+                                  <a class="page-link" href="/shop?page=<%= currentPage + 1 %>">
+                                    Next
+                                  </a>
+                                </li>
+                                <% } %>
+              </ul>
+            </nav>
+          </div>
+          <!-- PAGINATION END -->
+        </div>
+      </div>
+    </div>
+      <script>
+        function applyFilter() {
+          
+          const searchInput = document.getElementById('searchInput').value;
+          const checkboxes = document.querySelectorAll('[id^="category-"]');
+          const checkedCategories = [];
+
+          checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+              const categoryName = checkbox.id.replace('category-', '');
+              checkedCategories.push(categoryName);
+            }
+          });
+          const sortSelect = document.getElementById('sortSelect');
+          const selectedSortOption = sortSelect.value; // Get the selected value
+          $.ajax({
+            type: 'post',
+            url: "/productFilter",
+            data: {
+              categoryName: JSON.stringify(checkedCategories),
+              page: 1, // Initial page number
+              itemsPerPage: 15 ,// Adjust as needed
+              sortOption: selectedSortOption, // Include the selected value
+              searchInput:searchInput
+            },
+            success: function (res) {
+              productRender(res);
+
+            },
+            error: (error) => {
+              console.log("error while filtering in serverSide" + error);
+            }
+          });
+        }
+        // Add an event listener to the "Apply Filter" button
+        const applyFilterButton = document.getElementById('apply-filter-button');
+        applyFilterButton.addEventListener('click', applyFilter);
+
+
+      </script>
+      <!-- product rendering -->
+      <script>
+        function productRender(res) {
+          const productContainer = document.getElementById('product-container');
+          productContainer.innerHTML = '';
+
+          //res.paginationHTML
+          const products = res.productByCata;
+          products.forEach(function (data) {
+            console.log("data>>", data)
+            const item = `
+                    <div class="col">   
+                      <div class="card product-card ">
+                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                          data-mdb-ripple-color="light">
+
+                          <a href="/detaildView/+ data._id ">
+                            <img src="../../productImages/${data.images[2]}" alt="Card image cap"
+                              class="w-100" />
+                          
+                          <div class="mask">
+                            <div class="d-flex justify-content-start align-items-end h-100">
+                              <h5><span class="badge bg-primary ms-2">New</span></h5>
+                            </div>
+                          </div>
+                          <div class="hover-overlay">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                          </div>
+                          </a>
+                        </div>
+                        <div class="card-body">
+                          <h5 class="card-title">
+                             ${data.p_name}
+                          </h5>
+                          <p class="card-text text-dark">Price ₹  ${data.price} 
+                          </p>
+                          <div class="d-flex justify-content-between mb-2">
+                            <p class="text-muted mb-0">Available: <span class="fw-bold">5</span></p>
+                            <div class="ms-auto text-warning">
+                              <i class="fa fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </div>
+                          </div>
+                          <div class="d-flex justify-content-right">
+                            <a href="#" class="btn btn-primary me-2"><i class="fa-regular fa-heart"></i></a>
+                            <a href="#" class="btn btn-info"><i class="fa-sharp fa-solid fa-cart-shopping"></i></a>
+                          </div>
+                        </div>
+                       </div>
+                       </div>
+                             `
+            productContainer.innerHTML += item
+          });
+          // Update pagination UI based on the pagination data
+          const paginationContainer = document.getElementById('pagination-container');
+          paginationContainer.innerHTML = '';
+          const paginationData = res.paginationHTML;
+          const currentPage = paginationData.currentPage;
+          const totalPages = paginationData.totalPages;
+
+          let newPagination = `
+        <nav aria-label="..." class="d-flex align-items-center justify-content-center">
+            <ul class="pagination">`;
+
+          if (currentPage > 1) {
+            newPagination += `
+            <li class="page-item text-dark">
+                <a class="page-link" href="/shop?page=${currentPage - 1}" tabindex="-1">
+                    Previous
+                </a>
+            </li>`;
+          }
+
+          for (let page = 1; page <= totalPages; page++) {
+            if (page === currentPage) {
+              newPagination += `
+                <li class="page-item active">
+                    <a class="page-link" href="/shop?page=${page}">
+                        ${page}
+                    </a>
+                </li>`;
+            } else {
+              newPagination += `
+                <li class="page-item">
+                    <a class="page-link" href="/shop?page=${page}">
+                        ${page}
+                    </a>
+                </li>`;
+            }
+          }
+
+          if (currentPage < totalPages) {
+            newPagination += `
+            <li class="page-item">
+                                         <a class="page-link" href="/shop?page=${currentPage} + 1">
+                                            Next
+                                         </a>
+                                        </li>`
+          }
+          newPagination += ` </ul>
+                            </nav>`
+
+
+          paginationContainer.innerHTML += newPagination
+        }
+      </script>
+
+      <!-- --include footer-- -->
+      <%- include("../partials/footer")%>
+        <!-- /footer -->

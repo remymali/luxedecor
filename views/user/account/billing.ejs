@@ -1,0 +1,491 @@
+<!-- --include header-- -->
+<%- include("../../layout/layout")%>
+    <%- include("../../partials/user-header")%>
+        <!-- /header -->
+        <div class="container my-5 py-5">
+
+            <!--Section: Design Block-->
+            <section>
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="card mb-4">
+                            <div class="card-body">
+
+                                <div class="card-header py-3">
+                                    <h5 class="mb-0 text-font text-uppercase">Delivery address</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="billing_Form p-4">
+                                        <form action="/AddressUpdate" method="post">
+                                            <div class="row d-flex">
+                                                <div class="col-lg-6 col-12 d-flex flex-column p-2 gap-2 ">
+                                                    <label for="">Full Name*</label>
+                                                    <input type="text" name="name" required>
+                                                </div>
+                                                <div class="col-lg-6 col-12 d-flex flex-column p-2 gap-2 ">
+                                                    <label for="">House Name*</label>
+                                                    <input type="text" name="houseName" required>
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex">
+                                                <div class="d-flex col-lg-6 col-12 flex-column p-2 gap-2 ">
+                                                    <label for="">Street*</label>
+                                                    <input type="text" name="street" required>
+                                                </div>
+                                                <div class="d-flex col-lg-6 col-12 flex-column p-2 gap-2 ">
+                                                    <label for="">Town/City*</label>
+                                                    <input type="text" name="city" required>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex row">
+                                                <div class="d-flex col-lg-6 flex-column p-2 gap-2 ">
+                                                    <label for="">State*</label>
+                                                    <input type="text" name="state" required>
+                                                </div>
+                                                <div class="d-flex col-lg-6 flex-column p-2 gap-2 ">
+                                                    <label for="">Phone*</label>
+                                                    <input type="number" name="phone" required>
+                                                </div>
+                                            </div>
+                                            <div class="row f-flex align-items-end">
+                                                <div class="d-flex col-lg-6 flex-column p-2 gap-2 ">
+                                                    <label for="">pin*</label>
+                                                    <input type="number" name="postalCode" required>
+                                                </div>
+                                                <div class="p-2 col-lg-6 billing_button">
+                                                    <button class="btn btn-danger p-2" type="submit">
+                                                        Add New Address
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- right div -->
+                    <div class="col-md-6 mb-4 position-static">
+                        <div class="card mb-4">
+                            <div class="card-header py-3">
+                                <h5 class="mb-0 text-font">Items <span class="float-end mt-1"
+                                        style="font-size: 13px ;"></span></h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <form id="formSubmition">
+                                        <div class="container-fluid bg-white profile_Right p-4">
+                                            <div class=" p-2 px-3 my-3 border billinf_form_Wrapper">
+                                                <div class="p-2">
+                                                    <h5 class="text-danger fw-bold">Product Summary</h5>
+                                                </div>
+                                                <div class="container p-2 px-3 my-3 proSumWraper">
+                                                    <div class="container billing_img">
+                                                        <% cartProducts.forEach((data)=>{%>
+                                                            <table class="table table-borderless mt-4">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td
+                                                                            class="d-flex align-items-center justify-content-between gap-5 p-2">
+                                                                            <div class="d-flex mb-2">
+                                                                                <div class="flex-shrink-0">
+                                                                                    <img src="/productImages/<%=data.images[0]%>"
+                                                                                        alt="" width="60px"
+                                                                                        class="img-fluid">
+                                                                                </div>
+                                                                                <div
+                                                                                    class="flex-lg-grow-1 ms-3 product-name">
+                                                                                    <h6 class="small mb-0 product-name"
+                                                                                        style="color: #9a9a9a;">
+                                                                                        <a href=""
+                                                                                            class="text-reset text-decoration-none">
+                                                                                            <%=data.p_name%>
+                                                                                        </a>
+                                                                                    </h6>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td style="font-size: 14px;color: #9a9a9a; ">
+                                                                            <input readonly name="quantity"
+                                                                                style="width: 40px; border: white; border-radius: 5px; padding-left: 10px;"
+                                                                                value="<%= cartItems.find(item => data._id.toString() === item.productId.toString()).quantity %>">
+                                                                        </td>
+                                                                        <td style="font-size: 14px;color: #9a9a9a;">
+                                                                            <div
+                                                                                class="d-flex align-items-center mb-2 fw-bold">
+                                                                                ₹ <%= (cartItems.find(item=>
+                                                                                    item.productId.toString() ===
+                                                                                    data._id.toString()).price) %>
+                                                                            </div>
+                                                                        </td>
+                                                                        <input type="hidden" name="productId"
+                                                                            value="<%=data._id%>">
+                                                                        <input type="hidden" name="quantity"
+                                                                            value="<%= cartItems.find(item => data._id.toString() === item.productId.toString()).quantity %>">
+                                                                        <input type="hidden" name="CartProduct_price"
+                                                                            value="<%= cartItems.find(item => item.productId.toString() === data._id.toString()).price %>">
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <%}) %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class=" p-2 px-3 my-3 border billinf_form_Wrapper">
+                                                <div class=" billing_form">
+                                                    <% userAdress.forEach((data,index)=>{%>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <input type="radio" name="selectedAddress"
+                                                                id="selectedAddress" value="<%=data._id%>" required>
+                                                            <h6>Select Address</h6>
+                                                        </div>
+                                                        <div class="address p-2 px-3">
+                                                            <span style="color: #9a9a9a; font-size: 13.5px;">
+                                                                <Span>
+                                                                    <%=data.name%>,
+                                                                </Span>
+                                                                <Span>
+                                                                    <%=data.houseName%>,
+                                                                </Span>
+                                                                <Span>
+                                                                    <%=data.street%>,
+                                                                </Span>
+                                                                <Span>
+                                                                    <%=data.city%>,
+                                                                </Span>
+                                                                <Span>
+                                                                    <%=data.state%>,
+                                                                </Span>
+                                                                <br>
+                                                                <Span>Ph :<%=data.phone%>,</Span>
+                                                                <Span>Pin :<%=data.postalCode%></Span>
+                                                            </span>
+                                                        </div>
+                                                        <div class="mt-2">
+                                                            <hr class="bg-dark p-0 ">
+                                                        </div>
+                                                        <%})%>
+                                                </div>
+                                            </div>
+                                            <div class=" p-2 px-3 my-3 border billinf_form_Wrapper">
+                                                <div class="container-fluid  billing_bg mt-3">
+                                                    <div class="row d-flex p-4">
+                                                        <div class="p-2 col-lg-5 col-12">
+                                                            <div class="d-flex gap-2 billing_radio align-items-center">
+                                                                <input type="radio" name="method" id="InternetBanking"
+                                                                    value="InternetBanking">
+                                                                <label for="InternetBanking"
+                                                                    class="fw-bold">Bank</label>
+                                                            </div>
+                                                            <div class="d-flex gap-2 billing_radio align-items-center">
+                                                                <input type="radio" name="method" value="COD" id="COD">
+                                                                <label for="COD" class="fw-bold">Cash On
+                                                                    Delivery</label>
+                                                            </div>
+                                                            <div class="d-flex gap-2 billing_radio align-items-center">
+                                                                <input type="radio" name="method" id="Wallet"
+                                                                    value="Wallet">
+                                                                <label for="Wallet" class="fw-bold">Wallet</label> <a
+                                                                    style="text-decoration: none; background-color: #f5f5f5; border: 1px solid #ccc;
+                                                                    border-radius: 5px; " href="/wallet">Wallet
+                                                                    Recharge</a>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class=" p-2 px-3 my-3 border billinf_form_Wrapper">
+                                                <div class="container-fluid  billing_bg mt-3">
+                                                    <div class="row d-flex p-4">
+                                                        <div class="p-2 col-lg-5 col-12">
+
+
+                                                            <div class="card">
+                                                                <div class="card-header py-3">
+                                                                    <h5 class="mb-0 text-font text-uppercase">Coupon
+                                                                    </h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="form-group">
+                                                                        <div class="input-group left">
+                                                                            <select name="coupon" id="coupon"
+                                                                                class="form-select mb-2">
+                                                                                <option value="">Select Coupon</option>
+                                                                                <% coupons.forEach((data)=> { %>
+                                                                                    <option
+                                                                                        value="<%= data.couponName %>">
+                                                                                        <%= data.couponName %>
+                                                                                    </option>
+                                                                                    <% }); %>
+                                                                            </select>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div id="appliedCouponSection"
+                                                                        class="input-group right">
+                                                                        <p>Applied Coupon: <span id="appliedCoupon" style="color: blue; font-weight: bold;"></span></p>
+
+                                                                        <button id="removeCouponBtn"
+                                                                            onclick="removeCoupon()">Remove
+                                                                            Coupon</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="p-5 border mt-3 billing_Totall d-flex">
+                                                    <div class="col-lg-6">
+                                                        <h6 class="fw-bold">Totall </h6>
+                                                        <h6 class="fw-bold">Discount </h6>
+                                                        <h6 class="fw-bold">Shipping </h6>
+                                                        <h6 class="fw-bold">Grant Totall </h6>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <h6>: <span>₹ </span>
+                                                            <%=totalP_Price %>
+                                                        </h6>
+                                                        <h6>: <span>₹ <span id="discountRate">
+                                                                    <%=discount%>
+                                                                </span></span></h6>
+                                                        <h6>:<span> Free</span></h6>
+                                                        <h6>: <span>₹<span id="GrantTotall">
+                                                                    <%= totalPrice%>
+                                                                </span></span></h6>
+                                                        <input type="hidden" name="amount" id="amount"
+                                                            value="<%=totalPrice%>">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="text-center">
+                                                <button type="submit" id="formSubmition" 
+                                                    class="btn button-order col-md-10">Place order</button>
+                                            </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                            <script>
+                                $(document).ready(function () {
+                                    // Add a click event listener to the form submission button
+                                    $("#formSubmition").submit(function (event) {
+                                        // Prevent the default form submission behavior
+                                        event.preventDefault();
+
+                                        // Check if any radio button with the name "selectedAddress" is selected 
+                                        const selectedAddress = $("input[name='selectedAddress']:checked").val();
+                                        if (!selectedAddress) {
+                                            // Show an error message to the user (you can customize the message)
+                                            alert("Please select an address.");
+                                            return;
+                                        }
+                                        const selectedmethods = $("input[name='method']:checked").val();
+                                        alert(selectedmethods)
+                                        if (!selectedmethods) {
+                                            // Show an error message to the user (you can customize the message)
+                                            alert("Please select an payment method.");
+                                            return;
+                                        }
+
+                                        // All validations passed, proceed with the form submission using AJAX
+                                        $.ajax({
+                                            url: "/CheckOut", // Replace with the actual URL to submit the form data
+                                            type: "POST",
+                                            data: $("#formSubmition").serialize(), // Serialize the form data
+                                            success: function (response) {
+                                                console.log(response)
+                                                if (response.order_id) {
+                                                    var options = {
+                                                        "key": "rzp_test_PicapxCZgTdIJB", // Enter the Key ID generated from the Dashboard
+                                                        "amount": response.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                                        "currency": "INR",
+                                                        "name": response.productName,
+                                                        "description": response.description,
+                                                        "image": "https://example.com/your_logo",
+                                                        "order_id": response.order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                                                        "handler": function (response) {
+                                                            $.ajax({
+                                                                type: "post",
+                                                                url: "/savingData",
+                                                                data: { order: response.order },
+                                                                success: function (response) {
+                                                                    console.log(response)
+                                                                    window.location.href = '/order';
+                                                                }
+                                                            })
+                                                        },
+                                                        "prefill": {
+                                                            "name": response.name,
+                                                            "email": response.email,
+                                                            "contact": response.contact
+                                                        },
+                                                        "notes": {
+                                                            "address": "Razorpay Corporate Office"
+                                                        },
+                                                        "theme": {
+                                                            "color": "#3399cc"
+                                                        }
+                                                    };
+                                                    var rzp1 = new Razorpay(options);
+                                                    rzp1.on('payment.failed', function (response) {
+                                                        alert("payment failed")
+                                                    });
+                                                    rzp1.open();
+                                                } else if (response === 'successFully cod Completed') {
+                                                    // Optionally, you can redirect the user to another page after successful submission
+                                                    window.location.href = "/success";
+                                                }
+                                                else {
+                                                    alert(response.msg)
+                                                }
+                                                // // Handle the success response here
+                                                // console.log("Form submitted successfully!"); // Show a success message to the user
+                                                //alert("Form submitted successfully! Your data has been saved in the database.");
+
+
+                                            }
+                                        })
+                                    });
+                                });
+                            </script>
+
+
+
+
+
+
+
+                        </div>
+
+            </section>
+
+
+            <!--Section: Design Block-->
+            <!-- --include footer-- -->
+            <%- include("../../partials/footer")%>
+                <!-- /header -->
+                <style>
+                    .text-font {
+                        font-family: futura-pt, Tahoma, Geneva, Verdana, Arial, sans-serif;
+                        font-weight: 700;
+                        letter-spacing: .156rem;
+                        font-size: 1.125rem;
+                    }
+
+                    .text-price {
+                        padding: 0 .625rem;
+                        font-family: futura-pt, Tahoma, Geneva, Verdana, Arial, sans-serif;
+                        font-style: normal;
+                        font-size: .75rem;
+                        font-weight: 700;
+                        line-height: .813rem;
+                        letter-spacing: 1.6px;
+                    }
+
+                    .text-descriptions {
+                        font-family: futura-pt, Tahoma, Geneva, Verdana, Arial, sans-serif;
+                        font-style: normal;
+                        font-size: .75rem;
+                        font-weight: 400;
+                        line-height: 1.125rem;
+                        margin: .313rem 0 .938rem;
+                        padding: 0 .625rem;
+                    }
+
+                    .button-color {
+                        color: #4e4e4e;
+                        border-color: #4e4e4e;
+                    }
+
+                    .button-order {
+                        font-family: futura-pt, Tahoma, Geneva, Verdana, Arial, sans-serif;
+                        font-style: normal;
+                        font-size: .75rem;
+                        font-weight: 700;
+                        background-color: hsl(90, 40%, 50%);
+                        color: white;
+                    }
+                </style>
+
+                <script>
+                    // Add a function to calculate and update the total price with the discount
+                    function applyCoupon() {
+                        const selectedCoupon = document.getElementById('coupon').value;
+                        // Make an AJAX request to the server to retrieve the discount amount based on the selected coupon
+                        $.ajax({
+                            url: '/getDiscountAmount', // Replace with the actual URL to fetch discount amount
+                            method: 'POST',
+                            data: { coupon: selectedCoupon },
+                            success: function (response) {
+                                if (response.success) {
+                                    const couponName = selectedCoupon;
+                                    const discountAmount = parseFloat(response.discountAmount); // Parse the discount amount from the server response
+                                    const productsPrice = parseFloat('<%= totalPrice %>'); // Get the original products price
+                                    const discountedTotalPrice = productsPrice - discountAmount; // Calculate the discounted total price
+
+                                    // Update the displayed total price with the discount  
+                                    document.getElementById('GrantTotall').innerText = ` ${discountedTotalPrice.toFixed(2)}`;
+                                    // Update the displayed coupon name
+                                    document.getElementById('appliedCoupon').innerText = couponName;
+
+                                    // Show a success SweetAlert
+                                    swal({
+                                        title: 'Coupon Applied!',
+                                        text: `You received a discount of ₹ ${discountAmount.toFixed(2)}`,
+                                        icon: 'success',
+                                    });
+                                } else {
+                                    // Show an error SweetAlert
+                                    swal({
+                                        title: response.message,
+                                        //text: response.message,
+                                        icon: 'error',
+                                    });
+                                }
+                            },
+                            error: function (error) {
+                                console.log('Error applying coupon:', error);
+                                // Show an error SweetAlert
+                                swal({
+                                    title: 'Coupon Error!',
+                                    text: 'An error occurred while applying the coupon.',
+                                    icon: 'error',
+                                });
+                            }
+                        });
+
+                    }
+
+                    // Attach the applyCoupon function to the coupon select element's change event
+                    document.getElementById('coupon').addEventListener('change', applyCoupon);
+
+
+
+
+                    function removeCoupon() {
+                        // Reset the coupon input value to its default state
+                        document.getElementById('coupon').value = '';
+
+                        // Clear the applied coupon text
+                        document.getElementById('appliedCoupon').innerText = '';
+
+                        // Recalculate and update the total price without the coupon
+                        const productsPrice = parseFloat('<%= totalPrice %>');
+                        document.getElementById('GrantTotall').innerText = ` ${productsPrice.toFixed(2)}`;
+                    }
+                </script>

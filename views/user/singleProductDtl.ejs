@@ -1,0 +1,303 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+<%- include("../partials/user-header")%>
+<!-- /header -->
+<section class="container my-5 pt-3 h-50">
+  <div class="row m-4">
+      <div class="col-1 p-0"></div>
+      <div class="left col-lg-7 col-md-7 col-12 d-flex p-0 justify-content-center">
+          <div class="smal-img-group gap-3 d-flex flex-column ">
+              <div class="smal-img-col">
+                  <img src="/productImages/<%= products.images[0]%>" width="50%" alt=""
+                      class="img-fluid smalImg">
+              </div>
+              <div class="smal-img-col">
+                  <img src="/productImages/<%= products.images[1]%>" width="50%" alt=""
+                      class="img-fluid smalImg">
+              </div>
+              <div class="smal-img-col">
+                  <img src="/productImages/<%= products.images[2]%>" width="50%" alt=""
+                      class="img-fluid smalImg">
+              </div>
+              <div class="smal-img-col">
+                  <img src="/productImages/<%= products.images[3]%>" width="50%" alt=""
+                      class="img-fluid smalImg">
+              </div>
+              <div class="smal-img-col">
+                  <img src="/productImages/<%= products.images[0]%>" width="50%" alt=""
+                      class="img-fluid smalImg">
+              </div>
+          </div>
+          <div class="mian-img col-lg-10 col-md-12 col-12">
+              <img class="img-fluid" width="60% " src="/productImages/<%= products.images[0]%>" alt=""id="zoom">
+          </div>
+      </div>
+      <div class="right col-lg-4 col-md-4 col-12 gap-3 p-0">
+          <h3 class="mt-2">
+              <%= products.p_name %>
+          </h3>
+          <div class="ms-auto text-warning">
+            <i class="fa fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+              <span>(150 reviews) &nbsp;| &nbsp;<span class="text-success"><%= products.productStock %>  Instock</span></span>
+          </div>
+          <!-- <div class="container">
+            <button class="star">&#9734;</button>
+            <button class="star">&#9734;</button>
+            <button class="star">&#9734;</button>
+            <button class="star">&#9734;</button>
+            <button class="star">&#9734;</button>
+            <p class="current-rating">0 of 5</p>
+        </div> -->
+        <!-- code added -->
+        
+        <!-- ende code added -->
+          <h2 class="mt-2 d-flex">
+              <span class="text-dark">
+                  <h2>₹ <%= products.price %> &nbsp; </h2>
+              </span>
+              &nbsp;&nbsp; 
+                  <span class="mt-2" style="text-decoration: line-through; color: #9a9a9a; font-size:20px;">₹ <%= products.originalprice %></span> 
+                  &nbsp;
+                  <span class="text-success">
+                  <h2>15% off</h2>
+              </span>
+          </h2>
+          <div class="pt-2">
+              <p class="text-Description">
+                  <%= products.discription %>
+              </p>
+          </div>
+          <div class="mt-4" style="width:95%">
+              <hr class="line bg-dark">
+          </div>
+         
+          <h5 class="pt-2">Price:<%= products.price %></h5>
+          <div class="d-flex p_Cart_Buy gap-4 pt-2">
+<!--              
+                  <form action="#" method="get" id="WhishList">
+                      <input type="hidden" value="<%= products._id%>" id="whishlistProductId">
+                      <button type="submit" class="btn btn-warning text-white px-5 p-2" style="font-size: 13px;">
+                          Add to Whishlist
+                      </button>
+                  </form>
+                  <form action="/addtoCart/<%= products._id%>" method="post" id="CartForm">
+                      <input type="hidden" value="<%= products._id%>" id="cartProductId">
+                      <button type="submit" class="btn btn-danger text-white px-5 p-2"
+                          style="font-size: 13px;" id="addtoCart">Add to Cart</button>
+                  </form> -->
+                  <%if(user){%>
+                    <form action="" method="get" id="WhishList">
+                        <input type="hidden" value="<%= products._id%>" id="whishlistProductId">
+                        <button type="submit" class="btn btn-warning text-white px-5 p-2" style="font-size: 13px;">
+                            Add to Whishlist
+                        </button>
+                    </form>
+                    <form action="" method="post" id="CartForm">
+                        <input type="hidden" value="<%= products._id%>" id="cartProductId">
+                        <button type="submit" class="btn btn-danger text-white px-5 p-2"
+                            style="font-size: 13px;" id="addtoCart">Add to Cart</button>
+                    </form>
+                <%}else{%>
+                    <form action="/login" method="get">
+                        <input type="hidden" value="<%= products._id%>" id="whishlistProductId">
+                        <button type="submit" class="btn btn-warning text-white px-5 p-2" style="font-size: 13px;">
+                            Add to Whishlist
+                        </button>
+                    </form>
+                    <form action="/login" method="get">
+                        <input type="hidden" value="<%= products._id%>" id="cartProductId">
+                        <button type="submit" class="btn btn-danger text-white px-5 p-2"
+                            style="font-size: 13px;" id="addtoCart">Add to Cart</button>
+                    </form>
+                <%}%>
+                  <!-- <form action="/login" method="get">
+                      <input type="hidden" value="<%= %>" id="whishlistProductId">
+                      <button type="submit" class="btn btn-warning text-white px-5 p-2" style="font-size: 13px;">
+                          Add to Whishlist
+                      </button>
+                  </form>
+                  <form action="/login" method="get">
+                      <input type="hidden" value="<%= %>" id="cartProductId">
+                      <button type="submit" class="btn btn-danger text-white px-5 p-2"
+                          style="font-size: 13px;" id="addtoCart">Add to Cart</button>
+                  </form> -->
+             
+          </div>
+          <p  class=" text-center  text-success fw-bold mt-4 "  name="errorMessage"   id="CartSuccMsg"></p>
+          <div class="pt-3">
+              <div class="border border-dark p_Delivery_Border" style="max-width: 350px;">
+                  <div class="d-flex align-items-center p-3 gap-3">
+                      <img class="img-fluid" src="/assets/product/icon-delivery.png" alt=""
+                          style="width:40px">
+                      <h6>Free Delivery</h6>
+                  </div>
+                  <hr class="p-0 m-0 bg-dark">
+                  <div class="d-flex align-items-center p-3 gap-3">
+                      <img class="img-fluid" src="/assets/product/Icon-return.png" alt=""
+                          style="width:40px">
+                      <h6>Return Delivery</h6>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="pt-5">
+      <hr class="bg-dark m-0 p-0">
+      <!-- code adding for rating -->
+        
+      <!-- end of code added -->
+  </div>
+  <!-- Review Cards -->
+  <div class="row d-flex justify-content-center mt-4">
+    <div class="col-md-10">
+        <h3>Reviews and Ratings</h3>
+        
+        <!-- Loop through each review and rating -->
+        <% rating.forEach((review) => { %>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <!-- Display review content -->
+                    <p><%= review.review %></p>
+                    <!-- Display rating with stars -->
+                    <div class="rating">
+                        <% for (let i = 1; i <= 5; i++) { %>
+                            <% if (i <= review.rating) { %>
+                                <i class="fas fa-star filled"></i>
+                            <% } else { %>
+                                <i class="far fa-star"></i>
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+        
+        <!-- If no reviews are available, you can display a message -->
+        <% if (rating.length === 0) { %>
+        <p>No reviews available for this product.</p>
+        <% } %>
+    </div>
+</div>
+
+  
+</div>
+</section>
+<script src="/zoom/zoom.js"></script>
+<script src="/zoom/zoomsl.min.js"></script>
+<script src="/js/P_Image.js"></script>
+<!-- --include footer-- -->
+<%- include("../partials/footer")%>
+<!-- /header -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('CartForm');
+        const succMsg = document.getElementById('CartSuccMsg');
+        const cartItemCount = document.getElementById('cartItemCount');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            $.ajax({
+                type: 'post',
+                url: '/addtoCart/<%= products._id%>',
+                success: function (res) {
+                    console.log(res);
+                    
+                        succMsg.textContent = res           
+                                   
+                  const currentCount = parseInt(cartItemCount.textContent) || 0;
+                  const newCount = currentCount + 1;
+                  cartItemCount.textContent = newCount;
+              },
+            error: function (error) {
+                console.error('Error:', error);
+                // Handle error cases
+            }
+        });
+    });
+});
+
+
+</script>
+<script>
+    $(document).ready(function() {
+        $('#WhishList').submit(function(event) {
+            event.preventDefault();
+
+            const productId = $('#whishlistProductId').val();
+
+            $.ajax({
+                type: 'post',
+                url: `/wishlist/${productId}`,
+                success: function (res) {
+                    const succMsg = $('#CartSuccMsg');
+                    succMsg.text(res);
+                    succMsg.show();
+
+                    const cartItemCount = $('#cartItemCount');
+                    const currentCount = parseInt(cartItemCount.text()) || 0;
+                    const newCount = currentCount + 1;
+                    cartItemCount.text(newCount);
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                    // Handle error cases
+                }
+            });
+        });
+    });
+</script>
+<script>
+    // Function to hide the error message after a certain duration
+    function hideErrorMessage() {
+        const errorMessage = document.querySelector('[name="errorMessage"]');
+        if (errorMessage) {
+            errorMessage.style.display = 'none';
+        }
+    }
+  
+    // Hide the error message after 3000 milliseconds (3 seconds)
+    setTimeout(hideErrorMessage, 3000);
+    
+  </script>
+<script>
+    const stars=document.querySelectorAll('.star');
+const current_rating=document.querySelector('.current-rating');
+
+stars.forEach((star,index)=>{
+  star.addEventListener('click',()=>{
+
+    let current_star=index+1;
+    current_rating.innerText=`${current_star} of 5`;
+
+    stars.forEach((star,i)=>{
+        if(current_star>=i+1){
+          star.innerHTML='&#9733;';
+        }else{
+          star.innerHTML='&#9734;';
+        }
+    });
+
+  });
+});
+</script>
+  <style>
+/* Style filled stars with a yellow color */
+.rating .filled {
+    color: rgb(241, 241, 43);
+}
+
+.star{
+  border:none;
+  background-color: unset;
+  color:goldenrod;
+  font-size: 3rem;
+}
+
+p{
+  text-align: center;
+}
+  </style>

@@ -1,0 +1,65 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+    <%- include("../partials/admin-header")%>
+        <!-- /header -->
+        <section>
+            <div class="container mt-4 mb-5">
+                <div class="row ">
+                    <div class="col-md-6 mx-auto ">
+
+                        <div class="bg-light-title text-center py-3 mb-1">
+                            <h2 class="mx-auto w-100">Add Coupon</h2>
+                        </div>
+                        <form action="/admin/couponAdding" method="post">
+                            <div class="row">
+                                <div class="col-md-6 d-flex flex-column inputeWrapper">
+                                    <span class="mb-2 fw-bold" style="color: #8e8e8e; font-size: 13px;">Coupon
+                                        Name*</span>
+                                    <span class="text-dark fw-bold"></span>
+                                    <input class="p-2" type="text" name="couponName" id="couponName" required>
+                                </div>
+                                <div class="col-md-6 d-flex flex-column inputeWrapper">
+                                    <span class="mb-2 fw-bold" style="color: #8e8e8e; font-size: 13px;">Discount Perc*</span>
+                                    <span class="text-dark fw-bold"></span>
+                                    <input class="p-2" type="text" name="disc_Perc" id="disc_Perc" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- <div class="col-md-4 d-flex flex-column inputeWrapper">
+                                    <span class="mb-2 fw-bold" style="color: #8e8e8e; font-size: 13px;">Max
+                                        Value*</span>
+                                    <span class="text-dark fw-bold"></span>
+                                    <input class="p-2" type="text" name="maxValue" id="maxValue" required>
+                                </div> -->
+                                <div class="col-md-4 d-flex flex-column inputeWrapper">
+                                    <span class="mb-2 fw-bold" style="color: #8e8e8e; font-size: 13px;">Min
+                                        Value*</span>
+                                    <span class="text-dark fw-bold"></span>
+                                    <input class="p-2" type="text" name="minValue" id="minValue" required>
+                                </div>
+                                <div class="col-md-4 d-flex flex-column inputeWrapper">
+                                    <span class="mb-2 fw-bold" style="color: #8e8e8e; font-size: 13px;">Expiry
+                                        Date*</span>
+                                    <span class="text-dark fw-bold"></span>
+                                    <input class="p-2" type="date" name="expiryDate" id="expiryDate"
+                                        style="color: #8e8e8e;" required>
+                                </div>
+                            </div>
+                            <div class="row text-center">
+                                <div class="col-md-4 d-flex flex-column inputeWrapper mt-4 ">
+                                    <button class="btn btn-success mb-3" type="submit">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --include footer-- -->
+        <%- include("../partials/adminFooter")%>
+            <!-- /header -->

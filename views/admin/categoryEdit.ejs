@@ -1,0 +1,62 @@
+
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+<%- include("../partials/admin-header")%>
+<!-- /header -->
+
+    <section>
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center ">
+                <div class="card" style="border-radius: 1rem;">
+
+                    <form class="p-5" method="post" action="/admin/categoryEdit" >
+
+                        <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Edit
+                        </h3>
+
+                        <div class="form-outline mb-4">
+                            <input type="categoryName" required id="categoryName" name="categoryName" value="<%=category.categoryName %> "
+                                class="form-control form-control-lg" />
+                            <label class="form-label" for="categoryName">Category Name</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <input type="description" required id="description" name="description" value="<%=category.description %>"
+                                class="form-control form-control-lg" />
+                            <label class="form-label" for="description">Description</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <input type="isAvailable" required id="isAvailable" name="isAvailable" value="<%=category.isAvailable %>"
+                                class="form-control form-control-lg" />
+                            <label class="form-label" for="isAvailable">isAvailable</label>
+                            <!-- <label class="form-label" for="isAvailable">isAvailable</label><br>
+                            <input type="radio" id="Yes" name="isAvailable" value="<%=category.isAvailable %>">
+                            <label for="Yes">Yes</label><br>
+                            <input type="radio" id="No" name="isAvailable" value="<%=category.isAvailable %>">
+                            <label for="No">No</label><br> -->
+                        </div>
+                        <input type="hidden" required id="_id" name="_id" value="<%=category._id %>"
+                        class="form-control form-control-lg" />
+                        <div class="pt-1 mb-4">
+                            <button class="btn btn-dark btn-lg btn-block" type="submit">SAVE</button>
+                        </div>
+                        <% if(locals.message){ %>
+                            <h6 class="alter alert-danger text-capitalize text-center rounded-3">
+                                <%= message %>
+                            </h6>
+                            <% } %>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+<!-- --include footer-- -->
+<%- include("../partials/adminFooter")%>
+<!-- /header -->
+
+<!-- Your existing HTML code -->
+
+
+  

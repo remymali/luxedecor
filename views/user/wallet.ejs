@@ -1,0 +1,77 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+    <%- include("../partials/user-header")%>
+        <!-- /header -->
+
+<div class="container mt-5">
+    <div class="row py-5">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Your Wallet</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="d-flex align-items-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
+                                    <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
+                                </svg>
+                                <span class="m-1" style="padding-top: 5px;"><b>Balance:<br>Rs.<%= wallet%></b></span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="/walletHistory" class="btn btn-primary btn-sm">Wallet History</a>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row d-flex justify-content-center text-center py-5">
+                        <div class="col-md-8">
+                            <h6 style="text-align-last: left;">Top-up Balance</h6>
+                            <form class="wallet"  action="/topup" method="post" >
+                                <div class="mb-3">
+                                    <!-- <label for="topupAmount" class="form-label">Amount</label> -->
+                                    <input type="number" class="form-control" name="topUpAmount" id="topupAmount" placeholder="Enter amount">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Top-up</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- --include footer-- -->
+ <%- include("../partials/footer")%>
+ <!-- /footer -->
+ <script>
+    // Wait for the document to be ready
+$(document).ready(function () {
+    // Attach a click event handler to the "Top-up" button
+    $("#topupButton").click(function () {
+        // Get the form data
+        const formData = {
+            topUpAmount: $("#topupAmount").val()
+        };
+
+        // Perform an AJAX request
+        $.ajax({
+            type: "POST", // Specify the HTTP method (e.g., POST)
+            url: "/topup", // Replace with the actual URL for your AJAX endpoint
+            data: formData, // Send the form data
+            success: function (response) {
+                // Handle the AJAX response here (e.g., display a success message)
+                console.log("AJAX success:", response);
+            },
+            error: function (error) {
+                // Handle AJAX errors here (e.g., display an error message)
+                console.error("AJAX error:", error);
+            }
+        });
+    });
+});
+
+        
+</script>
+

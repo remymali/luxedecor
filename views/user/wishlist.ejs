@@ -1,0 +1,142 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+<%- include("../partials/user-header")%>
+<!-- /header -->
+<div class="container-fluid p-0 min-vh-100">
+    <div class="container ">
+        <div class="row p-4 ">
+            <div class="p-2 px-4 py-4 col-md-12">
+                <h4 class="fw-bold">My Wishlist</h4>
+            </div>
+            <% if(productDetails.length > 0) { %>
+            <% productDetails.forEach((data) => { %>
+               
+            <div class="col-md-4 mb-2 bg-light">
+                <div class="card" style="border-radius: 15px;">
+                    <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light"
+                        data-mdb-ripple-color="light">
+                        <img src="/productImages/<%= data.images[0]%>"
+                            style="border-top-left-radius: 15px; border-top-right-radius: 15px;" class="img-fluid"
+                            alt="Laptop" />
+                        <a href="#!">
+                            <div class="mask"></div>
+                        </a>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p><a href="#!" class="text-dark text-decoration-none" ><%=data.p_name%></a></p>
+                            </div>
+                            <div>
+                                <div class="d-flex flex-row justify-content-end mt-1 mb-4 text-warning">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-0" />
+                    <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <p><h2>₹ <%= data.price %>  </h2><span style="text-decoration: line-through" class="text-success">₹ <%= data.originalprice%></span></p>
+                            <p class="text-danger">&nbsp;<%=data.productOffer%> % off</p>
+                        </div>
+                    </div>
+                    <hr class="my-0" />
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center pb-2 mb-1">
+                            <a href="/wishlist/<%= data._id%>" class="text-dark fw-bold"><img src="/assets/icons/delete.png"
+                                    style="width: 20px;height: 20px"></a>
+                            <a href="#" class="text-decoration-none btn btn-primary addToCart"
+                                data-productid="<%=data._id%>">
+                                <span class="text-white ps-2">Add to cart</span>
+                            </a>
+                            
+                        </div>
+                        
+                    </div>                  
+                   
+                </div>
+                
+            </div>
+            
+            <% }) %>
+            <% } else { %>
+            <div class="col-md-12 d-flex justify-content-center align-items-center">
+                <div class="container mx-2 bg-white d-flex flex-column align-items-center justify-content-center p-2 px-4 py-4"
+                    style="border-radius: 14px; box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);">
+                    <img src="/assets/nav/empty image.png" background="transparent" speed="5"
+                        style="width: 300px; height: 300px; opacity: 80%;" loop autoplay></lottie-player>
+                    <div class="d-flex flex-column align-items-center justify-content-center "
+                        style="color: #9e9e9e;">
+                        <h5>Your Wishlist is Empty</h5>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <p class="text-center text-success ps-3 fw-bold mt-4" name="errorMessage" id="messageContainer"></p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const addToCartLinks = document.querySelectorAll('.addToCart');
+      const cartItemCount = document.getElementById('cartItemCount');
+      const messageContainer = document.getElementById('messageContainer'); 
+  
+      addToCartLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+          event.preventDefault();
+  
+          const productId = this.getAttribute('data-productid');
+  
+          fetch('/wishlistToCart', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId: productId })
+          })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json(); // Parse response as JSON
+          })
+          .then(function (response) {
+            console.log("response>>",response.message)
+            messageContainer.textContent = response.message;
+            messageContainer.classList.add('text-success'); 
+            const currentCount = parseInt(cartItemCount.textContent) || 0;
+            const newCount = currentCount + 1;
+            cartItemCount.textContent = newCount;
+           
+          })
+          .catch(function (error) {
+            console.log('Error:', error);
+            messageContainer.textContent = 'An error occurred while processing your request.';
+            messageContainer.classList.add('text-danger');
+          });
+        });
+      });
+    });
+  </script>
+  
+<!-- <script>
+    // Function to hide the error message after a certain duration
+    function hideErrorMessage() {
+    const errorMessage = document.querySelector('[name="errorMessage"]');
+    if (errorMessage && errorMessage.length > 0) {
+      errorMessage[0].style.display = 'none';
+    }
+    }
+  
+    // Hide the error message after 3000 milliseconds (3 seconds)
+    setTimeout(hideErrorMessage, 3000);
+  </script> -->
+<!-- --include footer-- -->
+<%- include("../partials/footer")%>
+<!-- /header -->

@@ -1,0 +1,277 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+  <%- include("../partials/user-header")%>
+    <!-- /header -->
+    <section class="h-100 h-custom" style="background-color: white;">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12">
+            <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+              <div class="card-body p-0">
+                <div class="row g-0">
+                  <div class="col-lg-8">
+                    <div class="p-5">
+                      <div class="d-flex justify-content-between align-items-center mb-5">
+                        <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+                        <h6 class="mb-0 text-muted">
+                          <%=cartCount %> items
+                        </h6>
+                      </div>
+                      <table style="width:100%; overflow-x: scroll;">
+
+                        <tbody>
+                          <% cartProducts.forEach((data,index)=>{%>
+                            <tr>
+                              <td class=" p-3 d-flex align-items-center ">
+                                <a href="/detaildView/<%= data._id%>"
+                                  class="px-0 container d-flex align-items-center text-decoration-none text-dark">
+                                  <img src="/productImages/<%= data.images[0]%>" alt="" class="img-fluid" width="70px"
+                                    style="border-radius: 5px;">
+                                  <div class="d-flex flex-column product-name">
+                                    <h6 for="" class="fw-bold ps-3 product-name" style="font-size: 13.5px;">
+                                      <%=data.p_name%>
+                                    </h6>
+                                    <span id="StockExceed" class="text-danger fw-bold ps-3"></span>
+                                  </div>
+                                </a>
+                                <span></span>
+                              </td>
+                              <td class="p-3">
+                                <div class="input-container d-flex align-items-center gap-2">
+                                  <button type="button" class="minus shadow" style="border-radius: 5px;"
+                                    onclick="decreaseQuantity(this)">
+                                    –
+                                  </button>
+                                  <input type="number" readonly id="quantityUpdate-<%= cartItems[index]._id %>"
+                                    class="d-flex align-items-center track-input"
+                                    data-item-id="<%= cartItems[index]._id %>" name="quantity"
+                                    value="<%= cartItems.find(item => item.productId.toString() === data._id.toString()).quantity %>"
+                                    style="width: 40px; border: 2px solid #020202; border-radius: 4px;"
+                                    onchange="updateQuantity(this,'<%= cartItems[index]._id %>')" min="1">
+                                  <button type="button" class="plus shadow" style="border-radius: 5px;"
+                                    onclick="increaseQuantity(this)">
+                                    +
+                                  </button>
+                                </div>
+                              </td>
+                              <td class="p-3">
+                                <h6 for="" class="fw-bold" id="cartPrice-<%= cartItems[index]._id %>">₹
+                                  <%= ( cartItems.find(item=> item.productId.toString() === data._id.toString()).price)
+                                    %>
+                                </h6>
+                              </td>
+                              <td class="p-3 text-center">
+                                <form action="/cartDelete/<%= (
+                              cartItems.find(item=> item.productId.toString() ===
+                              data._id.toString())._id) %>" method="post">
+                                  <button class="btn btn-danger d-flex align-items-center justify-content-center"
+                                    style="border-radius: 10px; font-size:12px; width:80%">
+                                    <span class="p-1">Remove</span>
+                                  </button>
+                                </form>
+                              </td>
+                            </tr>
+                            <%})%>
+                        </tbody>
+                      </table>
+
+
+                      <hr class="my-4">
+
+                      <div class="pt-5">
+                        <h6 class="mb-0"><a href="../Shop" class="text-body"><i
+                              class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 bg-grey">
+                    <div class="p-5">
+                      <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                      <hr class="my-4">
+
+                      <div class="d-flex justify-content-between mb-4">
+                        <h5 class="text-uppercase">items </h5>
+                        <h5>
+                          <%=cartCount%>
+                        </h5>
+                      </div>
+
+
+
+                      <!-- <h5 class="text-uppercase mb-3">Give code</h5> -->
+
+                      <div class="mb-5">
+                        <!-- <div class="form-outline">
+                        <input type="text" id="form3Examplea2" class="form-control form-control-lg" />                        
+                        <label class="form-label" for="form3Examplea2">Enter your code</label>
+                        <span class="input-group-append"> <button class="btn btn-primary btn-apply coupon">Apply</button> </span>
+                      </div> -->
+                        <!-- <div class="card mb-3">
+                          <div class="card-body">
+
+                          
+
+                            </div>
+                          </div>
+                        </div> -->
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-between mb-5">
+                          <h6 class="text-uppercase">Total price</h6>
+                          <div class="col-lg-6">
+                            <h5>:<span id="totalPrice1">
+                                ₹ <%= productsPrice %>
+                              </span>
+                            </h5>
+                          </div>
+                        </div>
+
+                        
+                        <!-- start -->
+                        <div class="col-lg-6">
+                          <!-- <h6>:<span id="totalPrice1">
+                              ₹ <%= productsPrice %>
+                          </span>
+                      </h6> -->
+                          <!-- <h6>:<span id="discountPrice">
+                              ₹ <%= discount %></span>
+                      </h6>
+                      <h5>:<span id="totalPrice2">
+                              ₹ <%= totalPrice %>
+                          </span>
+                      </h5> -->
+                        </div>
+                        <!-- end -->
+                        <form action="/checkOutPage" method="get" onsubmit="return validateCart('<%=cartCount%>')">
+                          <button type="submit" class="btn btn-dark btn-block btn-lg"
+                            data-mdb-ripple-color="dark">Checkout</button>
+                        </form>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    <!-- --include footer-- -->
+    <%- include("../partials/footer")%>
+      <!-- /header -->
+
+      <style>
+        @media (min-width: 1025px) {
+          .h-custom {
+            height: 100vh !important;
+          }
+        }
+
+        .card-registration .select-input.form-control[readonly]:not([disabled]) {
+          font-size: 1rem;
+          line-height: 2.15;
+          padding-left: .75em;
+          padding-right: .75em;
+        }
+
+        .card-registration .select-arrow {
+          top: 13px;
+        }
+
+        .bg-grey {
+          background-color: #eae8e8;
+        }
+
+        @media (min-width: 992px) {
+          .card-registration-2 .bg-grey {
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+          }
+        }
+
+        @media (max-width: 991px) {
+          .card-registration-2 .bg-grey {
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+          }
+        }
+      </style>
+      <script>
+        function decreaseQuantity(button) {
+          const inputElement = button.nextElementSibling;
+          console.log(inputElement)
+          let quantity = +inputElement.value;
+          if (quantity > 1) {
+            quantity--;
+            inputElement.value = quantity;
+            updateQuantity(inputElement, inputElement.getAttribute("data-item-id"));
+          }
+
+        }
+        function increaseQuantity(button) {
+          const inputElement = button.previousElementSibling;
+          let quantity = +inputElement.value;
+          quantity++;
+          inputElement.value = quantity;
+          updateQuantity(inputElement, inputElement.getAttribute("data-item-id"));
+        }
+        function updateQuantity(input, itemId) {
+          const cartPrice = document.getElementById(`cartPrice-${itemId}`);
+          const totalPrice1 = document.getElementById('totalPrice1');
+          const totalPrice2 = document.getElementById('totalPrice2');
+          const discount = document.getElementById('discountPrice');
+          const StockExceed = document.getElementById('StockExceed');
+          const inputElement = input;
+          let quantity = +$(input).val();
+
+          console.log("njan inputinta ala" + quantity)
+          $.ajax({
+            url: '/quantityUpdate/' + itemId,
+            method: 'POST',
+            data: { quantity: quantity },
+            success: function (response) {
+              const totalQuantity = response.ProQuantity
+              console.log("NJan Backend ala" + totalQuantity)
+              cartPrice.innerText = `₹ ${response.cartPrice}`;
+              totalPrice1.innerText = `₹ ${response.total}`;
+              //totalPrice2.innerText = `₹ ${response.grantTotal}`;
+              //discount.innerText = `₹ ${response.discount}`;
+              if (totalQuantity < 5 && totalQuantity > 0) {
+                StockExceed.style.display = "block";
+                StockExceed.innerText = `Only${response.ProQuantity} left`;
+                setTimeout(() => {
+                  StockExceed.style.display = "none";
+                }, 1000)
+              } else if (totalQuantity <= 0) {
+                StockExceed.style.display = "block";
+                StockExceed.innerText = "Out Of Stock";
+              }
+            },
+            error: function (error) {
+              console.log('Error updating quantity:', error);
+            }
+          });
+        }
+      </script>
+      <script>
+        function validateCart(count) {
+          // Convert count to a number
+          var cartCount = parseInt(count);
+      
+          if (cartCount === 0) {
+            // Cart is empty, show a SweetAlert2 alert
+            swal({
+              icon: 'error',
+              title: 'Cart is empty!',
+              text: 'Please add items to the cart before checking out.',
+              confirmButtonText: 'OK'
+            });
+            return false; // Prevent form submission
+          } else {
+            // Cart is not empty, allow form submission
+            return true;
+          }
+        }
+      </script>
+     

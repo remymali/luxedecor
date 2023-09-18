@@ -1,0 +1,127 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+    <%- include("../partials/admin-header")%>
+        <!-- /header -->
+
+        <!-- <section>
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center ">
+                <div class="card" style="border-radius: 1rem;"> -->
+        <section>
+            <div class="container mt-4 mb-5">
+                <div class="row ">
+                    <div class="col-md-6 mx-auto ">
+                        <div class="bg-light-title text-center py-3 mb-3">
+                            <h2 class="mx-auto w-100">Edit Products</h2>
+                        </div>
+                        <form  method="POST" action="/admin/productEdit" enctype="multipart/form-data">
+
+
+                            <div class="mb-3">
+                                <input type="text" required id="p_name" name="p_name" value="<%=products.p_name %> "
+                                    class="form-control form-control" />
+                                <label class="form-label" for="p_name">Product Name</label>
+                            </div>
+                            <div class="mb-3">
+                                <input type="originalprice" required id="originalprice" name="originalprice" value="<%=products.originalprice %>"
+                                    class="form-control form-control" />
+                                <label class="form-label" for="price">Original Price</label>
+                            </div>
+                            <div class="mb-3">
+                                <input type="description" required id="description" name="description"
+                                    value="<%=products.description %>" class="form-control form-control" />
+                                <label class="form-label" for="description">Description</label>
+                            </div>
+
+                            <div class="mb-3">
+                                <input type="productOffer" required id="productOffer" name="productOffer"
+                                    value="<%=products.productOffer %>" class="form-control form-control" />
+                                <label class="form-label" for="productOffer">Product Offer</label>
+
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" required id="productStock" name="productStock" value="<%=products.productStock %>"
+                                    class="form-control form-control" />
+                                <label class="form-label" for="productStock">Stock</label>
+
+                            </div>
+                            <div class="mb-3">
+                               
+                                <!-- <input type="text" class="mt-1 py-2" productsname="category"
+                                placeholder="Category" required> -->
+                                <select name="selectcategory" class="form-select mr-5"
+                                    aria-label="Default select example">
+                                    <option selected>Select the category</option>
+                                    <% categorydata.forEach((category)=> { %>
+                                        <option name="<%= category.categoryName %>"
+                                            value="<%= category.categoryName %>">
+                                            <%= category.categoryName %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                                <label for="">Category</label>
+                            </div>
+                            <!-- <div class="mb-3">
+                                <input type="quantity" required id="quantity" name="quantity"
+                                    value="<%=products.quantity %>" class="form-control form-control" />
+                                <label class="form-label" for="quantity">quantity</label>
+
+                            </div> -->
+                            <input type="hidden" required id="_id" name="_id" value="<%=products._id %>"
+                                class="form-control form-control-lg" />
+                            <div class="mb-3">
+
+                                <div style="flex: 1;">
+                                    <!-- <input class="form-control" name="file"  type="file" id="formFileMultiple" multiple /> -->
+                                    <input class="form-control" name="image" type="file" id="formFileMultiple"
+                                        multiple />
+                                    <label class="form-label" for="file">Upload Image</label>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                
+                                <div>
+                                    <% products.images.forEach(image=> { %>
+
+                                        <input type="checkbox" name="imagesToDelete" value="<%= image %>">
+
+
+                                        <img src="/productImages/<%= image %>" alt="Product Image"
+                                            style="max-width: 100px; max-height: 100px;">
+                                        <% }) %>
+                                </div>
+                                <label for="">Existing Images</label>
+                            </div>
+                            <input type="hidden" name="existingImages" value="<%= products.images%>">
+
+                            <div class="mb-3">
+                                <button class="btn btn-dark btn-lg btn-block" type="submit">SAVE</button>
+                            </div>
+
+                            <% if(locals.message){ %>
+                                <h6 id="errorMessage" class="alter alert-danger text-capitalize text-center rounded-3">
+                                    <%= message %>
+                                </h6>
+                                <% } %>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- --include footer-- -->
+        <%- include("../partials/adminFooter")%>
+            <!-- /header -->
+
+            <script>
+                // Function to hide the error message after a certain duration
+                function hideErrorMessage() {
+                    const errorMessage = document.getElementById('errorMessage');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }
+
+                // Hide the error message after 3000 milliseconds (3 seconds)
+                setTimeout(hideErrorMessage, 3000);
+            </script>

@@ -1,0 +1,105 @@
+<%- include("../layout/layout")%>
+<%- include("../partials/admin-header")%>
+
+<section class="mt-5 w-25%">
+  <div class="container ">
+    <% orders.forEach((order)=> { %>
+        <div class="p-3 " style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
+          <div class="responsive-table ">
+            <table>
+              <tr class="mb-3">
+                <th><strong>Order ID</strong></th>
+                <td>ORD_Id_<%= order._id %></td>
+              </tr>
+              <tr class="mb-3">
+                <th><strong>User</strong></th>
+                <td>USR_Id_<%= order.userId %></td>
+              </tr>
+              <tr class="mb-3">
+                <th><strong>Order Status</strong></th>
+                <td>
+                  <form action="/admin/changeorderstatus?id=<%= order._id %>" method="post">
+                    <select name="status" id="status_<%= order._id %>" onchange="updateOrderStatus('<%= order._id %>')" style="width: 100%; background-color: white;">
+                      <option value="<%= order.status %>"><%= order.status %></option>
+                      <option value="Processing" <% if (order.status==="Processing" ) { %>selected<% } %>>Processing</option>
+                      <option value="Shipped" <% if (order.status==="Shipped" ) { %>selected<% } %>>Shipped</option>
+                      <option value="Out For Delivery" <% if (order.status==="Out For Delivery" ) { %>selected<% } %>>Out For Delivery</option>
+                      <option value="Delivered" <% if (order.status==="Delivered" ) { %>selected<% } %>>Delivered</option>
+                      <option value="Canceled" <% if (order.status==="Canceled" ) { %>selected<% } %>>Canceled</option>
+                      <option value="Return Accepted" <% if (order.status==="Return Accepted" ) { %>selected<% } %>>Return Accepted</option>
+                    </select>
+                  </td>
+                    <td>
+                    <input class="bg-primary border no-border border-radius rounded" type="submit">
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <th><strong>Purchase Date</strong></th>
+                <td><%= order.createdAt.toISOString().slice(0, 10) %></td>
+              </tr>
+              <tr>
+                <th><strong>Delivery Date</strong></th>
+                <td>
+                  <form action="/admin/changeDeliverydate?id=<%= order._id %>" method="post">
+                    
+                    <input type="date" id="deliverydate" name="deliverydate" value=<%= order.expectedDelivery.toISOString().slice(0, 10) %>>
+                    <input class="bg-primary border no-border border-radius rounded" onclick="dateSelecting()" type="submit">
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <th><strong>Payment Method  </strong>  </th>
+                <td>COD</td>
+              </tr>
+            </table>
+          </div>
+          
+          </div>
+          
+        <% order.products.forEach((prod)=>{ %>
+
+          <div class="d-flex flex-row mb-4 pb-2 "
+            style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;padding: 15px; border-radius: 10px; margin-top: px;">
+            <div class="flex-fill">
+              <h5 class="bold">
+                <%=prod.p_name %>
+              </h5>
+              <img style="width: 100px; height: 60px;" src="/productImages/<%=prod.image[0]%>" alt="">
+              <p class="text-muted fw-bold"> Qty: <%=prod.quantity%>
+              </p>
+              <h4 class="mb-3 fw-bold"> Price : <span>&#8377; <%= prod.realPrice%>
+                </span>
+              </h4>
+              <div class="d-flex justify-content-between">
+                <hr style="color: black;">
+              </div>
+            </div>
+            <div>
+              <img class="align-self-center img-fluid" src="" width="250">
+            </div>
+            <!-- <div>
+              <h5 class="fw-normal mr-5 pr-5"><a style="text-decoration: none;"
+                  onclick="return confirm('Are you sure you want to cancel this order?')"
+                  href="/cancelorder?id=<%=prod.productID%>&odr=<%=order.orderid%>">Cancel</a>
+              </h5>
+            </div> -->
+            <!-- <div>
+              <h5 class="fw-normal ml-5 pl-5" style="margin-left: 5px;"><a
+                  style="text-decoration: none;margin-left: 5px;" href="#!">Return</a>
+              </h5>
+            </div> -->
+          </div>
+          <% }) %>
+        <% }) %>
+  </div>
+</section>
+<script>
+  function dateSelecting() {
+  document.getElementById("deliverydate").select();
+}
+   
+</script>
+<!-- FOOTER -->
+<%- include("../partials/adminFooter")%>
+<!-- FOOTER END -->

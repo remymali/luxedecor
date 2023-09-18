@@ -1,0 +1,55 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+<!-- /header -->
+<div class="pt-3 " style="justify-content: space-between;">
+    <h3 class="text-danger" style="text-align: justify;">Sales Report</h3>
+    <!-- <a href="/admin/addproduct" class="btn btn-outline-primary" style="height: 40px; width: 200px; margin-top: 35px;">Add New Product</a> -->
+  </div>
+
+
+  <div style="text-align: right;">
+    <p>
+       <a href="/admin/Pdf" class="btn btn-danger"><i class="fa fa-download float-right"></i>Download</a>
+    </p>
+ </div>
+  <% if (locals.message) { %>
+    <div class="alert alert-danger">
+      <strong><%= message %> </strong>
+    </div>
+  <% } %> 
+
+   
+<div class="container p-2">
+    <table class="table table-bordered table-hover table-striped" style="text-align: center;">
+      <thead class="thead-dark">
+        <tr>
+          <th  scope="col">OrderID</th>
+          <th scope="col">Order status</th>
+          <th scope="col">Payment Method</th>
+          <th scope="col">Product</th>
+          <th scope="col">Price</th>
+  
+        </tr>
+      </thead>
+
+      <tbody>
+        
+        <% orders.forEach((detail)=>{ %>
+       
+          <tr class="word-wrap">
+            <td class="word-wrap"> <%=detail.orderId %></td>
+            <td><%=detail.status %> </td>
+            <td><%=detail.payment%>  </td>
+            <td><%=detail.p_name%>  </td>
+            <td><%=detail.price%>  </td>
+            <!-- Inside your table body -->
+            
+
+          </tr>
+          <% }) %>
+        
+          
+      </tbody>
+    </table>
+</div>
+<!-- /footer -->

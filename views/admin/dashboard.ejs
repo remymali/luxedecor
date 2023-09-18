@@ -1,0 +1,421 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+  <%- include("../partials/admin-header")%>
+    <!-- /header -->
+    <section>
+      <div class="container">
+        <div class="row mt-5 ">
+          <!-- <div ><img style="width: 100%; height:100%;" src="https://images.klipfolio.com/website/public/22b133bc-124d-44f4-85f8-9170b08d3ce9/dashboard-examples-hero.png"></div> -->
+
+          <div class="container text-center mb-3">
+
+            <!--  #################  Head Portion: total order,product& user #########-->
+            <div class="row text-center mt-2">
+              <div class="col-lg-12 ">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title p-2">Admin Dashboard</h4>
+                    <div class="row ">
+                      <div class="col-md-3 stretch-card grid-margin">
+                        <div class="card bg-gradient-danger shadow">
+                          <div class="card-body">
+                            <h4 class="mb-3">Total Orders
+                            </h4>
+
+                            <h2 class="mb-5">
+                              <%=totalOrder%>
+                            </h2>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3 stretch-card grid-margin">
+                        <div class="card bg-gradient-danger shadow">
+                          <div class="card-body">
+
+                            <h4 class="mb-3" style="color: palevioletred;">Total Sales
+                            </h4>
+
+                            <h2 class="mb-5">
+                              <%=totalAmount%>
+                            </h2>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder shadow">
+                          <div class="card-body">
+                            <h4 class="font-weight-normal mb-3">Total Users
+                            </h4>
+                            <h2 class="mb-5">
+                              <%=totalUser%>
+                            </h2>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3 stretch-card grid-margin">
+                        <div class="card bg-gradient-success card-img-holder shadow">
+                          <div class="card-body">
+                            <h4 class="font-weight-normal mb-3">Total Products
+                            </h4>
+                            <h2 class="mb-5">
+                              <%=totalProduct %>
+                            </h2>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3 mt-2 stretch-card grid-margin">
+                        <div class="card bg-gradient-success card-img-holder shadow">
+                          <div class="card-body">
+                            <h4 class="font-weight-normal mb-3">Order Canceled
+                            </h4>
+                            <h2 class="mb-5">
+                              <%=canceled %>
+                            </h2>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--  #################  end ################# -->
+
+
+            <!--  #################  Sales Section ################# -->
+            <div class="container m-md-1 bg-white rounded">
+
+
+              <!--  #################  Chart Section of Full Orders ################# -->
+              <div class="row mt-md-2 pb-md-2 shadow" id="totalSales">
+                <div class="col-md-7 col-sm-12 grid-margin">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="clearfix">
+                        <h4 class="card-title float-left">Sales Statistics</h4>
+                        <div id="visit-sale-chart-legend"
+                          class="rounded-legend legend-horizontal legend-top-right float-right">
+                        </div>
+                      </div>
+                      <section>
+                        <div class="container">
+                          <div class="row ">
+                            <!-- <div class="col-lg-6">
+                              <select name="cars" id="CataFilter" class="btnYear fw-bold mt-3  align-items-left">
+                                <option>select</option>
+                                <%cata.forEach((data,index)=>{%>
+                                  <option value="<%=data.categoryName%>">
+                                    <%=data.categoryName%>
+                                  </option>
+                                  <%})%>
+                              </select>
+                              <Button class="float-right btn btn-danger align-items-right">Sales Report</Button>
+                            </div> -->
+                            <div class="col-lg-6">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <select name="cars" id="CataFilter" class="btnYear fw-bold mt-3">
+                                  <option>select</option>
+                                  <%cata.forEach((data,index)=>{%>
+                                    <option value="<%=data.categoryName%>">
+                                      <%=data.categoryName%>
+                                    </option>
+                                  <%})%>
+                                </select>
+                                <form action="/admin/dashboard/salesReport"  method="get">
+                                <Button type="submit" class="btn btn-danger" style="text-align: end;">Sales Report</Button>
+                                </form>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <div>
+                                <canvas id="myChart"></canvas>
+                              </div>
+
+                              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                              <script>
+
+                                const ctx = document.getElementById('myChart');
+                                const myChart1 = new Chart(ctx, {
+                                  type: 'bar',
+                                  data: {
+                                    labels: [],
+                                    datasets: [{
+                                      label: 'Sales Data',
+                                      data: [],
+                                      backgroundColor: 'rgba(0, 123, 255, 0.5)'
+                                    }]
+                                  },
+
+                                  options: {
+                                    scales: {
+                                      y: {
+                                        beginAtZero: true
+                                      }
+                                    }
+                                  }
+                                });
+
+                                // Add event listener to the select element
+                                const selectElement = document.getElementById('CataFilter');
+                                selectElement.addEventListener('change', (event) => {
+                                  const selectedCategory = event.target.value;
+                                  console.log("selectedCategory>>", selectedCategory)
+                                  //sendSelectedCategory(selectedCategory);
+                                  fetchDataAndUpdateChart(selectedCategory)
+                                });
+
+                                // Function to fetch and update chart data
+                                async function fetchDataAndUpdateChart(selectedCategory) {
+                                  try {
+                                    const response = await fetch('/admin/dashboard/graphcategory', {
+                                      method: 'POST',
+                                      headers: {
+                                        'Content-Type': 'application/json'
+                                      },
+                                      body: JSON.stringify({ category: selectedCategory })
+                                    });
+
+                                    if (response.ok) {
+                                      const data = await response.json();
+                                      console.log("data", data)
+
+                                      // Process the data and update the chart
+                                      const labels = data.map(item => item.label);
+                                      const values = data.map(item => item.value);
+
+
+                                      // Update the chart data and labels
+                                      myChart1.data.labels = labels;
+                                      myChart1.data.datasets[0].data = values;
+                                      myChart1.update();
+                                    } else {
+                                      console.error('Error fetching data from the server');
+                                    }
+                                  } catch (error) {
+                                    console.error('An error occurred:', error);
+                                  }
+                                }
+                              </script>
+                            </div>
+                            <!-- </form> -->
+
+                          </div>
+                        </div>
+                      </section>
+                      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5 col-sm-12 grid-margin">
+                  <div class="card">
+                    <div class="card-body">
+                      <div>
+                        <div>
+                          
+                          <div class="grid-margin stretch-card "><h3 class="mt-3 ps-4 ">Order Summary</h3></div>
+                          
+                          
+                          <form id="salesForm" action="/admin/dashboard/graph" method="post">
+
+                            <div class="row m-md-1 bg-white pb-2 shadow rounded ">
+
+                              <div class="col-md-4 grid-margin stretch-card pt-3">
+                                <select class="form-select form-select-sm" style="width: 100%; border-color: rgb(119, 145, 207);
+                                border-width: 1px; color: rgb(15, 1, 3); border-radius: 20px; font-weight:
+                                bold; margin-bottom: 5px; margin-top: 5px;" aria-label=".form-select-sm example"
+                                  name="salesRe" id="sales" onchange="getData()">
+                                  <option selected>Select</option>
+                                  <option value="Daily">Daily</option>
+                                  <option value="Monthly">Monthly</option>
+                                  <option value="Yearly">Yearly</option>
+                                </select>
+                              </div>
+                              <div class="col-md-4 grid-margin stretch-card pt-3" style="display: none;"
+                                id="chooseMonth">
+                                <select class=" form-select form-select-sm" style="width: 100%; border-color: palevioletred;
+              border-width: 1px; color: rgb(15, 1, 3); border-radius: 20px; font-weight:
+              bold; margin-bottom: 5px; margin-top: 5px;" aria-label=".form-select-sm example" name="month">
+                                  <option selected>Monthly</option>
+                                  <option value="2023-01-01">January 2023</option>
+                                  <option value="2023-02-01">February 2023</option>
+                                  <option value="2023-03-01">March 2023</option>
+                                  <option value="2023-04-01">April 2023</option>
+                                  <option value="2023-05-01">May 2023</option>
+                                  <option value="2023-06-01">June 2023</option>
+                                  <option value="2023-07-01">July 2023</option>
+                                  <option value="2023-08-01">August 2023</option>
+                                  <option value="2023-09-01">September 2023</option>
+                                  <option value="2023-10-01">October 2023</option>
+                                  <option value="2023-11-01">November 2023</option>
+                                  <option value="2023-12-01">December 2023</option>
+                                </select>
+
+                              </div>
+                              <div class="col-md-4 grid-margin stretch-card pt-3" style="display: none;" id="chooseDay">
+                                <input type="date" name="today">
+
+                              </div>
+                              <div class="col-md-4 grid-margin stretch-card pt-3" style="display: none;"
+                                id="chooseYear">
+                                <select class=" form-select form-select-sm" style="width: 100%; border-color: palevioletred;
+              border-width: 1px; color: rgb(15, 1, 3); border-radius: 20px; font-weight:
+              bold; margin-bottom: 5px; margin-top: 5px;" aria-label=".form-select-sm example" name="year">
+                                  <option selected>Year</option>
+                                  <option value="2023"> 2023</option>
+
+                                </select>
+
+                              </div>
+                              <div class="col-md-4 grid-margin stretch-card pt-3">
+                                <button type="submit" class="btn btn-primary" data-toggle="button" aria-pressed="false"
+                                  autocomplete="off">
+                                  Submit
+                                </button>
+
+                              </div>
+
+
+                            </div>
+                          </form>
+                        </div>
+                        <canvas id="barChart" class="shadow p-2"></canvas>
+                        <input type="hidden" id="orderStatus" value="<%=orderStatus%>">
+                      </div>
+
+                      <script>
+                       // Initialize the chart instance
+                        const bar = document.getElementById('barChart');
+                        const status = JSON.parse(document.getElementById('orderStatus').value);
+                        let labels = Object.keys(status);
+                        let data = Object.values(status);
+
+                        const myChart = new Chart(bar, {
+                          type: 'bar',
+                          data: {
+                                    labels: [],
+                                    datasets: [{
+                                      label: 'Sales Data',
+                                      data: [],
+                                      backgroundColor: 'rgba(0, 123, 255, 0.5)'
+                                    }]
+                                  }
+                        });
+
+                        
+
+                        document.getElementById('salesForm').addEventListener('submit', async (event) => {
+                          event.preventDefault();
+
+                          // Collect form data
+                          const formData = new FormData(document.getElementById('salesForm'));
+                          const salesRe = formData.get('salesRe');
+                          const year = formData.get('year');
+                          const month = formData.get('month');
+                          const today = formData.get('today');
+
+                          console.log("salesRe", salesRe);
+                          console.log("year", year);
+                          console.log("formData", formData);
+
+                          try {
+                            const response = await fetch('/admin/dashboard/graph', {
+                              method: 'POST',
+                              headers: {
+                                'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify({ salesRe, year, month, today })
+                            });
+
+                            if (response.ok) {
+                              const data = await response.json();
+                              console.log('Received data:', data);
+
+                              // Process the data and update the chart
+                              const labels = data.map(item => item.label);
+                              const values = data.map(item => item.value);
+                              // Update the chart data and labels
+                              myChart.data.labels = labels;
+                              myChart.data.datasets[0].data = values;
+                              myChart.update();
+                            } else {
+                              console.error('Error fetching data from the server');
+                            }
+                          } catch (error) {
+                            console.error('An error occurred:', error);
+                          }
+                        });
+                      </script>
+
+
+                      <script>
+                        //Fetch Data ***********************
+                        function fetchSalesData(url, options, type, id) {
+
+                          fetch(url, options)
+                            .then(response => response.json())
+                            .then(data => {
+
+                              console.log(data);
+
+                              createGraph(data, type, id)
+
+
+                            })
+                        }
+
+                        //select sales Order Type*******************
+                        function getData() {
+                          const selectedValue = document.getElementById('sales').value;
+                          console.log(selectedValue);
+                          const mode = selectedValue;
+                          let options;
+                          if (mode === "Daily") {
+                            document.getElementById('chooseYear').style.display = "none";
+                            document.getElementById('chooseMonth').style.display = "none";
+                            document.getElementById('chooseDay').style.display = "block";
+                          } else if (mode === "Monthly") {
+                            document.getElementById('chooseDay').style.display = "none";
+                            document.getElementById('chooseYear').style.display = "none";
+                            document.getElementById('chooseMonth').style.display = "block";
+                          } else if (mode === "Yearly") {
+                            document.getElementById('chooseMonth').style.display = "none";
+                            document.getElementById('chooseDay').style.display = "none";
+                            document.getElementById('chooseYear').style.display = "block";
+                          } else {
+
+                          }
+                        }
+
+                      </script>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--  ~~~~~~~~  Nav end ~~~~~~~~ -->
+
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+
+
+
+
+
+
+    <!-- --include header-- -->
+    <%- include("../partials/adminFooter")%>
+      <!-- /header -->

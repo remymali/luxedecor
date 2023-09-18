@@ -1,0 +1,111 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+<%- include("../partials/user-header")%>
+<!-- /header -->
+<section class="container ">
+  <div class="row">
+     
+      <div class="left col-lg-4   d-flex p-0 justify-content-center">
+          
+          <div class="mian-img col-lg-10 col-md-12 col-12">
+              <img class="img-fluid" width="50% " src="/productImages/<%= products.images[0]%>" alt=""id="zoom">
+          </div>
+      </div>
+      
+      <div class="right col-lg-4 col-md-4 col-12 gap-3 mt-2 pt-5">
+          <h3 class="mt-2">
+              <%= products.p_name %>
+          </h3>
+          
+         
+          <h2 class="mt-2 d-flex">
+              <span class="text-dark">
+                  <h2>₹ <%= products.price %> &nbsp; </h2>
+              </span>
+              &nbsp;&nbsp; 
+                  <span class="mt-2" style="text-decoration: line-through; color: #9a9a9a; font-size:20px;">₹ <%= products.originalprice %></span> 
+                  &nbsp;
+                  <span class="text-success">
+                  <h2>15% off</h2>
+              </span>
+          </h2>
+          <div class="pt-2">
+              <p class="text-Description">
+                  <%= products.discription %>
+              </p>
+          </div>
+      </div>
+          <div class="mt-4" style="width:95%">
+              <hr class="line bg-dark">
+          </div>
+          <form id="reviewForm" action="/addReview" method="post">
+            <div>
+                <h5 class="pt-2">Review</h5>
+                <textarea name="review" id="review" rows="4" cols="50"></textarea>
+            </div>
+            <h5 class="pt-2">Rating</h5>
+            <div class="d-flex p_Cart_Buy gap-4 pt-2 col-12">
+                <div class="container">
+                    <button class="star" data-rating="1">&#9734;</button>
+                    <button class="star" data-rating="2">&#9734;</button>
+                    <button class="star" data-rating="3">&#9734;</button>
+                    <button class="star" data-rating="4">&#9734;</button>
+                    <button class="star" data-rating="5">&#9734;</button>
+                </div>
+                <div class="container">
+                    <input type="hidden" name="rating" id="rating-input" value="0">
+                    <input type="hidden" name="p_Id" value="<%=productId%>">
+                </div>
+            </div>
+            
+            <!-- <button type="submit" id="submitButton">Submit</button> -->
+        </form>
+        
+        <script>
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating-input');
+            const reviewForm = document.getElementById('reviewForm');
+            const submitButton = document.getElementById('submitButton');
+        
+            stars.forEach((star) => {
+                star.addEventListener('click', () => {
+                    const rating = star.getAttribute('data-rating');
+                    ratingInput.value = rating;
+                    updateStars(rating);
+                });
+            });
+        
+            function updateStars(selectedRating) {
+                stars.forEach((star) => {
+                    const rating = star.getAttribute('data-rating');
+                    if (rating <= selectedRating) {
+                        star.innerHTML = '&#9733;';
+                    } else {
+                        star.innerHTML = '&#9734;';
+                    }
+                });
+            }
+        
+            submitButton.addEventListener('click', () => {
+                if (ratingInput.value === '0') {
+                    alert('Please select a rating.');
+                    return false; // Prevent form submission
+                }
+            });
+        </script>
+        
+        </script>
+          <style>
+            
+        .star{
+          border:none;
+          background-color: unset;
+          color:goldenrod;
+          font-size: 3rem;
+        }
+        
+        p{
+          text-align: center;
+        }
+          </style>
+        

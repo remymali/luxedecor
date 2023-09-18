@@ -1,0 +1,44 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+    <%- include("../partials/user-header")%>
+        <!-- /header -->
+        <div class="container mt-5">
+            <div class="row py-5">
+                <div class="col-md-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Wallet History</h3>
+                        </div>
+        <div class="col-md-8 offset-md-2">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Process</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through wallet history transactions -->
+                        <% for (const history of userDetails) { %>
+                            <tr>
+                                <td><%= history.process %></td>
+                                <td class="<%= (history.process === 'TopUp' || history.process === 'Refund') ? 'text-success' : 'text-danger' %>">
+                                    <span><%= (history.process === 'TopUp' || history.process === 'Refund') ? '+' : '-'%> <strong><%= history.amount %></strong>
+                                </td>
+                                <td><%= history.date.toLocaleString() %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+        
+<!-- --include footer-- -->
+<%- include("../partials/footer")%>
+<!-- /footer -->

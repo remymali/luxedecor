@@ -1,0 +1,137 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+        <!-- /header -->
+
+        <!-- <div class="container mt-5">
+            <div class="col-sm-6 col-sm-offset-3"> -->
+
+        <% if (message) { %>
+            <div id="errorMessage" class="alert alert-danger">
+                <%= message %>
+            </div>
+            <% } %>
+                <section class="pt-5">
+                    <div class="container mt-4 mb-5 pt-5">
+                        <div class="row ">
+                            <div class="col-md-6 mx-auto ">
+
+                                <div class="bg-light-title text-center py-3 mb-1">
+                                    <h2 class="mx-auto w-100">Admin Login</h2>
+                                </div>
+                                <!-- LOGIN FORM -->
+                                <form action="/admin/adminLogin" method="post" id="form">
+                                    <div class="mb-3">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control" name="email" id="email">
+                                        <div class="error text-danger"></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Password</label>
+                                        <input type="password" class="form-control" name="password" id="password">
+                                        <div class="error text-danger"></div>
+                                    </div>
+
+                                    <% if (fail) { %>
+                                        <div class="alert-danger">
+                                            <%= fail %>
+                                        </div>
+                                        <% } else{%>
+                                            <div class="">
+                                                <%= fail %>
+                                            </div>
+                                            <% } %>
+                                                <div class="bg-light text-center py-3 ">
+                                                    <button type="submit" class="btn btn-success btn-lg">Signup</button>
+                                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+
+                </div>
+                </div>
+
+                
+                    <script>
+                        // login submission validation
+
+                        //submission
+                        const form = document.querySelector('#form')
+                        const useremail = document.querySelector('#email');
+                        const password = document.querySelector('#password');
+                        //  {{!-- const successMessage = document.getElementById("login-success-message");
+                        // successMessage.classList.remove("hidden");
+                        //  setTimeout(function() {
+                        //   successMessage.classList.add("hidden");
+                        // }, 3000); --}}
+
+                        form.addEventListener('submit', (e) => {
+
+                            if (!validateInputs()) {
+                                e.preventDefault();
+                            }
+                        })
+
+                        function validateInputs() {
+                            const useremailVal = useremail.value.trim()
+                            const passwordVal = password.value.trim();
+                            let success = true
+
+                            if (useremailVal === '') {
+                                success = false;
+                                setError(useremail, 'email Id is required')
+                            }
+                            else {
+                                setSuccess(useremail)
+                            }
+
+
+                            if (passwordVal === '') {
+                                success = false;
+                                setError(password, 'Password is required')
+                            }
+                            else if (passwordVal.length < 5) {
+                                success = false;
+                                setError(password, 'Password must be atleast 5 characters long')
+                            }
+                            else {
+                                setSuccess(password)
+                            }
+
+                            return success;
+
+                        }
+
+                        function setError(element, message) {
+                            const inputGroup = element.parentElement;
+                            const errorElement = inputGroup.querySelector('.error')
+
+                            errorElement.innerText = message;
+                            inputGroup.classList.add('error')
+                            inputGroup.classList.remove('success')
+                        }
+
+                        function setSuccess(element) {
+                            const inputGroup = element.parentElement;
+                            const errorElement = inputGroup.querySelector('.error')
+
+                            errorElement.innerText = '';
+                            inputGroup.classList.add('success')
+                            inputGroup.classList.remove('error')
+                        }
+                    </script>
+                    <script>
+                        // Function to hide the error message after a certain duration
+                        function hideErrorMessage() {
+                            const errorMessage = document.getElementById('errorMessage');
+                            if (errorMessage) {
+                                errorMessage.style.display = 'none';
+                            }
+                        }
+
+                        // Hide the error message after 3000 milliseconds (3 seconds)
+                        setTimeout(hideErrorMessage, 3000);
+                    </script>

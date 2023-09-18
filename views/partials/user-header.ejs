@@ -1,0 +1,162 @@
+<header>
+  <nav id="navbar" class="navbar navbar-expand-lg  navbar-fixed-top navbar-light bg-light">
+    <div class=" container ">
+      <a class="navbar-brand fw-bold" href="/">
+        <div class="logo-image" style="width:100 ;height:20">
+          <img src="/assets/nav/logo.png" class="img-fluid">
+        </div>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/shop">Shop</a>
+          </li>
+          <!-- <li class="nav-item">
+                    <a class="nav-link" href="#">Logout</a>
+                  </li> -->
+          <%if(user){%>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">logOut</a>
+            </li>
+            <%}else{%>
+              <li class="nav-item"></li>
+              <a class="nav-link" href="/login">login</a>
+              </li>
+              <%}%>
+
+        </ul>
+
+        <input class="search p-3" type="search" placeholder="What you looking for?" aria-label="Search"
+          id="searchInput">
+        <!-- <button class="btn btn-outline-success" type="submit">Search</button> -->
+
+        <!-- Icons -->
+        <ul class="navbar-nav d-flex flex-row me-1">
+          <li class="nav-item me-3 me-lg-0">
+            <a class="nav-link text-black" href="/wishlist"><i class="fas fa-heart"></i></a>
+          </li>
+          <li class="nav-item me-3 me-lg-0">
+            <a class="nav-link text-black" href="/cart">
+              <i class="fas fa-shopping-cart"></i>
+              <% if(locals.cartCount){%>
+                <span id="cartItemCount"
+                  class="badge badge-pill bg-danger d-flex justify-content-center align-items-center p-1"
+                  style="border-radius: 50%; position: absolute; top: 20px;  width: 18px; height: 18px;font-size: 9px;">
+                  <%=locals.cartCount%>
+                </span>
+                <%}else{%>
+                  <span id="cartItemCount"
+                    class="badge badge-pill bg-danger d-flex justify-content-center align-items-center p-1"
+                    style="border-radius: 50%; position: absolute; top: 20px;  width: 18px; height: 18px;font-size: 9px;">
+                    0
+                  </span>
+                  <%}%>
+            </a>
+          </li>
+          <li class="nav-item me-3 me-lg-0">
+            <a class="nav-link text-black" href="/address"><i class="fas fa-user"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<!-- Search input -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById('searchInput');
+    const placeholder = searchInput.placeholder;
+    searchInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        const searchQuery = searchInput.value;
+        $.ajax({
+          type: 'get',
+          url: '/search',
+          data: { q: searchQuery },
+          success: function (res) {
+            console.log("res1>>",res);
+            if (res.length > 0) {
+              SearchRender(res);
+            } else {
+              searchInput.placeholder = "No Product Found";
+            }
+          },
+
+          error: (error) => {
+            console.log(`Error while performing search: ${error}`);
+          }
+        });
+      }
+    });
+  });
+</script>
+<script>
+  function SearchRender(res) {
+
+    console.log("data>>", res)
+    const productContainer = document.getElementById('product-container');
+    productContainer.innerHTML = '';
+
+
+
+    //res.paginationHTML
+    const products = res;
+    console.log("data>>", products)
+    products.forEach(function (data) {
+      console.log("data>>", data)
+      const item = `
+              <div class="col">   
+                <div class="card product-card ">
+                  <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                    data-mdb-ripple-color="light">
+
+                    <a href="/detaildView/+ data._id ">
+                      <img src="../../productImages/${data.images[2]}" alt="Card image cap"
+                        class="w-100" />
+                    
+                    <div class="mask">
+                      <div class="d-flex justify-content-start align-items-end h-100">
+                        <h5><span class="badge bg-primary ms-2">New</span></h5>
+                      </div>
+                    </div>
+                    <div class="hover-overlay">
+                      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </div>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">
+                       ${data.p_name}
+                    </h5>
+                    <p class="card-text text-dark">Price ₹  ${data.price} 
+                    </p>
+                    <div class="d-flex justify-content-between mb-2">
+                      <p class="text-muted mb-0">Available: <span class="fw-bold">5</span></p>
+                      <div class="ms-auto text-warning">
+                        <i class="fa fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-right">
+                      <a href="#" class="btn btn-primary me-2"><i class="fa-regular fa-heart"></i></a>
+                      <a href="#" class="btn btn-info"><i class="fa-sharp fa-solid fa-cart-shopping"></i></a>
+                    </div>
+                  </div>
+                 </div>
+                 </div>
+                       `
+      productContainer.innerHTML += item
+    });
+    
+  }
+</script>

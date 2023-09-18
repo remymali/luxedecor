@@ -1,0 +1,64 @@
+<!-- --include header-- -->
+<%- include("../layout/layout")%>
+<%- include("../partials/admin-header")%>
+<!-- /header -->
+
+<section>
+  <div class="container mt-4 mb-5">
+      <div class="row ">
+          
+<div class="d-flex " style=" width: 80%; margin-left: 25px; justify-content: space-between;">
+    <h3 class="mb-2 ml-5">Orders</h3>
+    <!-- <a href="/admin/addproduct" class="btn btn-outline-primary" style="height: 40px; width: 200px; margin-top: 35px;">Add New Product</a> -->
+  </div>
+
+  <% if (locals.message) { %>
+    <div class="alert alert-danger">
+      <strong><%= message %> </strong>
+    </div>
+  <% } %> 
+
+    <div class="d-flex">
+      <form action="/admin/orderSearch" method="post" class="d-flex ms-2 me-2" role="search" >
+        <input class="form-control me-2 w-50" type="text" placeholder="Search status" id="search" name="search">
+        <button class="btn btn-primary" type="submit">Search</button> 
+    </form> 
+  </div>
+
+    <table class="table table-bordered table-hover table-striped" style="text-align: center;">
+      <thead class="thead-dark">
+        <tr>
+          <th  scope="col">OrderID</th>
+          <th scope="col">Order status</th>
+          <th scope="col">Payment Method</th>
+  
+        </tr>
+      </thead>
+
+      <tbody>
+        
+        <% orders.forEach((detail)=>{ %>
+       
+          <tr class="word-wrap">
+            <td class="word-wrap"> <%=detail._id %></td>
+            <td><%=detail.status %> </td>
+            <td><%=detail.payment.method %>  </td>
+            <!-- Inside your table body -->
+            <td><form
+              action="/admin/orderDetails/<%=detail._id%>" 
+              method="get"><button class="btn btn-outline-primary" 
+              type="submit">Details</button></form></td>
+
+          </tr>
+          <% }) %>
+        
+          
+      </tbody>
+    </table>
+          </div>
+      </div>
+  
+</section>
+    <!-- --include footer-- -->
+    <%- include("../partials/adminFooter")%>
+<!-- /footer -->
