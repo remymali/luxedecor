@@ -7,17 +7,19 @@
   <div class="container col-lg-4 d-flex flex-column justify-content-center align-items-center rounded-5 p-5 bg-white">
     <h4>Enter OTP Code</h4>
     <form action="/otp" method="post">
-    <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2"> 
-        <input class="m-3 text-center form-control rounded" name="first" type="text" id="first" maxlength="1" />
-         <input class="m-2 text-center form-control rounded" name="second" type="text" id="second" maxlength="1" />
-          <input class="m-2 text-center form-control rounded" name="third" type="text" id="third" maxlength="1" /> 
-          <input class="m-2 text-center form-control rounded" name="fourth" type="text" id="fourth" maxlength="1" /> 
-          <input class="m-2 text-center form-control rounded" name="fifth" type="text" id="fifth" maxlength="1" /> 
-          <input class="m-2 text-center form-control rounded" name="sixth" type="text" id="sixth" maxlength="1" /> 
-        </div> 
-        <div class="mt-4"> 
-            <button type="submit" id="otp-btn" class="btn btn-primary px-4 validate">Verify</button> 
-        </div> 
+      <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+        <!-- Your OTP input fields -->
+        <!-- Add Bootstrap classes for better spacing -->
+        <input class="m-2 text-center form-control rounded" name="first" type="text" id="first" maxlength="1" />
+        <input class="m-2 text-center form-control rounded" name="second" type="text" id="second" maxlength="1" />
+        <input class="m-2 text-center form-control rounded" name="third" type="text" id="third" maxlength="1" />
+        <input class="m-2 text-center form-control rounded" name="fourth" type="text" id="fourth" maxlength="1" />
+        
+      </div>
+      <div class="mt-4 text-center">
+        <!-- Align the button to the center -->
+        <button type="submit" id="otp-btn" class="btn btn-primary px-4">Verify</button>
+      </div>
     </form>
   </div>
 </div>

@@ -109,7 +109,8 @@
                             <h5 class="card-title"><%= element.p_name %></h5>
                             <p class="card-text text-dark">Price ₹ <%= element.price %></p>
                             <div class="d-flex justify-content-between mb-2">
-                                <p class="text-muted mb-0">Available: <span class="fw-bold">5</span></p>
+                                <p class="text-muted mb-0">Available: <span class="fw-bold"><%= element.productStock
+                                   %></span></p>
                                 <div class="ms-auto text-warning">
                                     <i class="fa fa-star"></i>
                                     <i class="fas fa-star"></i>

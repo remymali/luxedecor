@@ -23,17 +23,15 @@ var client = require('twilio')(SID, authToken)
 var jwt = require('jsonwebtoken')
 
 const otpGenerator = require('otp-generator');
-const otp = otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+const otp = 2345 //otpGenerator.generate(4, { upperCaseAlphabets: false, specialChars: false });
 console.log(otp);
 /*twilio validation*/
 const verifyOtp = (req, res) => {
   try {
-    let { first, second, third, fourth, fifth, sixth } = req.body;
-    let [first1, second1, third1, fourth1, fifth1, sixth1] = otp;
-    if (first == first1 && second == second1 && third == third1 && fourth == fourth1 && fifth == fifth1 && sixth == sixth1) {
-      // req.session.id = req.body.mobile;
-      // req.session.user = req.body.username;
-      // req.session.user1 = true
+    let { first, second, third, fourth} = req.body;
+    const otpString = otp.toString();
+    let [first1, second1, third1, fourth1] =otpString
+    if (first == first1 && second == second1 && third == third1 && fourth == fourth1) {
       res.redirect('/');
     }
     else {
@@ -58,7 +56,7 @@ const sendTextMessage = (otp) => {
 }
 
 var otpGeneration = (req, res) => {
-  sendTextMessage(otp)
+  //sendTextMessage(otp)
   res.render('./user/otp', { title: 'e-Commerce', message: "OTP veification", user: req.session.user })
 }
 // PASSWORD ENCRIPTION
@@ -71,8 +69,13 @@ const pwdEncription = (password) => {
 const home = async (req, res) => {
 
   const banners = await bannerModel.find()
-  console.log("banners>>", banners.map(item => item.url))
+  //console.log("banners>>", banners.map(item => item.url))
   const products = await productsModel.aggregate([
+    {
+      $match: {
+        availability: true, // Filter by availability
+      },
+    },
     {
       $lookup: {
         from: 'categories',
@@ -90,6 +93,8 @@ const home = async (req, res) => {
       }
     }
   ]).sort({ _id: -1 }).limit(8)
+
+  //console.log("products>>",products)
   const userData = await usersModel.find();
   const cart = userData.cart;
   const cartCount = 0//cart.length;
@@ -120,46 +125,53 @@ const shop = async (req, res) => {
     cartCount = cart.length
   }
   const category = await categoryModel.find({ isAvailable: true })
+  // const products = await productsModel.aggregate([
+  //   {
+  //     $match: {
+  //       availability: true, // Filter by availability
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: 'categories',
+  //       let: { category: '$category' }, // Local variable for category
+  //       pipeline: [
+  //         {
+  //           $match: {
+  //             $expr: {
+  //               $and: [
+  //                 { $eq: ['$categoryName', '$$category'] }, // Match based on category field
+  //                 { $eq: ['$isAvailable', true] } // Filter by isAvailable field
+  //               ]
+  //             }
+  //           }
+  //         }
+  //       ],
+  //       as: 'joinedData'
+  //     }
+  //   }
+  // ]);
+ 
+  
   const products = await productsModel.aggregate([
     {
       $lookup: {
         from: 'categories',
-        let: { category: '$category' }, // Local variable for category
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $and: [
-                  { $eq: ['$categoryName', '$$category'] }, // Match based on category field
-                  { $eq: ['$isAvailable', true] } // Filter by isAvailable field
-                ]
-              }
-            }
-          }
-        ],
+        localField: 'category',
+        foreignField: 'categoryName',
         as: 'joinedData'
       }
+    },
+    {
+      $unwind: '$joinedData'  // Unwind the joined array
+    },
+    {
+      $match: {
+        'joinedData.isAvailable': true  // Filter by categoryName
+      }
     }
-  ]);
-
-  // const products = await productsModel.aggregate([
-  //   {
-  //     $lookup: {
-  //       from: 'categories',
-  //       localField: 'category',
-  //       foreignField: 'categoryName',
-  //       as: 'joinedData'
-  //     }
-  //   },
-  //   {
-  //     $unwind: '$joinedData'  // Unwind the joined array
-  //   },
-  //   {
-  //     $match: {
-  //       'joinedData.isAvailable': true  // Filter by categoryName
-  //     }
-  //   }
-  // ]).skip(skip).limit(perpage);
+  ]).skip(skip).limit(perpage);
+  console.log("products",products)
   res.render('./user/shop', { title: 'e-Commerce', message: "", products, category, user: req.session.user, cart, cartCount, currentPage: pageNum, totalPages });
 };
 
@@ -232,21 +244,9 @@ const pdf = async (req, res) => {
     const userDetails = await usersModel.findOne({ email: req.session.user });
     const order = await orderModel.find({ _id: orderId });
     const products = order.map(items => items.products).flat();
-    // const orderProducts = order.map(items => items.proCartDetail).flat();
-    // const cartProducts = order.map(items => items.cartProduct).flat();
-    // for (let i = 0; i < orderProducts.length; i++) {
-    //   const orderProductId = orderProducts[i]._id;
-    //   const matchingCartProduct = cartProducts.find(cartProduct => cartProduct.productId.toString() === orderProductId.toString());
-
-    //   if (matchingCartProduct) {
-    //     orderProducts[i].cartProduct = matchingCartProduct;   
-    //   }
-    // }
+    
     const address = userDetails.address.find(items => items._id.toString() == order.map(items => items.address).toString());
-    // const subTotal = cartProducts.reduce((totals, items) => totals + items.realPrice, 0);
-    // const [orderCanceld] = order.map(item => item.orderCancleRequest);
-    // const orderStatus = order.map(item => item.status);
-
+    
     const invoiceBuffer = await generateInvoice(order, products, address);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=invoice.pdf');
@@ -259,15 +259,15 @@ const pdf = async (req, res) => {
 const productFilter = async (req, res) => {
   try {
     const searchInput = req.body.searchInput
-    console.log("searchInput>>", searchInput);
+    //console.log("searchInput>>", searchInput);
     const key = req.query.searchInput;
     const searchPattern = { $regex: '^' + key, $options: 'i' };
     const sortFilter = req.body.sortOption
-    console.log("sortFilter>>", sortFilter);
+    //console.log("sortFilter>>", sortFilter);
     const itemsPerPage = parseInt(req.body.itemsPerPage) || 10;
     const page = parseInt(req.body.page) || 1;
     const categoryName = JSON.parse(req.body.categoryName);
-    console.log("categoryName>>", categoryName);
+    //console.log("categoryName>>", categoryName);
     const perpage = 15
     //price sorting
     let sortDirection = 1; // Default ascending
@@ -289,12 +289,12 @@ const productFilter = async (req, res) => {
     // const productByCata = await productsModel.find({ availability: true, category: { $in: categoryName } }).sort({ price: sortDirection })
     //   .skip((page - 1) * itemsPerPage)
     //   .limit(itemsPerPage);
-    console.log("productByCata", productByCata);
+   // console.log("productByCata", productByCata);
     const totalPages = Math.ceil(productByCata.length / perpage);
     const currentPage = page;
 
     const paginationData = { currentPage, totalPages };
-    console.log("paginationHTML>>", paginationData);
+   // console.log("paginationHTML>>", paginationData);
     res.json({
       productByCata: productByCata,
       paginationHTML: paginationData
@@ -382,8 +382,8 @@ const signupPost = async (req, res) => {
   
       
       // OTP CODE 
-      //res.redirect('/otp')
-      res.redirect('/');
+      res.redirect('/otp')
+     // res.redirect('/');
     }
     else {
       res.render('user/signUp', { title: 'e-Commerce', message: "Please Use a Uniqe Email ID and Phone Number", user: req.session.user })
@@ -410,15 +410,16 @@ const validation = async (req, res) => {
       if (userData) {
         const VPWD = await bcrypt.compare(password, userData.password);
         if (VPWD) {
-          // const userNumber = userData.phone;
+          //const userNumber = userData.phone;
+          req.session.phone = userData.phone
           // const number = userNumber;
           // let cartCount;   
           // let signinPage = 0;  
 
           req.session.user = userData.email
           //for development testing
-          res.redirect('/');
-          //res.redirect("/otp");
+          //res.redirect('/');
+          res.redirect("/otp");
         } else {
           //const cart = userData.cart.items;
           //const cartCount = cart.length;
@@ -485,6 +486,7 @@ const detaildView = async (req, res, next) => {
 //CART
 const cartDtls = async (req, res) => {
   try {
+
     const user = req.session.user
     const userEmail = req.session.user
     const userDetails = await usersModel.findOne({ email: userEmail })
@@ -499,6 +501,7 @@ const cartDtls = async (req, res) => {
     );
 
     const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+
     // const coupons= await couponModel.find({},{couponName:1,couponValue:1})
     let totalPrice = 0;
     for (const item of cartItems) {
@@ -573,7 +576,7 @@ const couponCalcu = async (req, res) => {
       discountAmount: parseInt(disc),
       cartItems: userDetails.cart, // Send the updated cart items
     });
-  } else {
+  } else {   
     // Coupon not found or doesn't meet the criteria
     res.json({
       success: false,
@@ -635,13 +638,13 @@ const cartQuantityUpdate = async (req, res) => {
     const cartId = req.params.id;
     console.log("cartId>>", cartId);
     const data = Number(req.body.quantity);
-    //console.log("data>>", data);
+    console.log("data>>", data);
     const user = req.session.user;
     const userDetails = await usersModel.findOne({ email: user });
 
     const cartItems = userDetails.cart.find(item => item._id.toString() === cartId.toString());
     const CartProductIds = cartItems.productId.toString();
-    //console.log("CartProductIds>>", CartProductIds);
+    console.log("CartProductIds>>", CartProductIds);
 
     const product = await productsModel.find({ _id: { $in: CartProductIds } });
     console.log("product>>", product);
@@ -804,7 +807,7 @@ const checkout = async (req, res) => {
     const cartProducts = await productsModel.find({ _id: { $in: cartProductIds } });
     let totalP_Price = cartItems.reduce((total, items) => total + parseFloat(items.originalprice * items.quantity), 0);
     // totalP_Price=Math.abs(totalP_Price*quantity)
-    const coupons = await couponModel.find({}, { couponName: 1, disc_Perc: 1 })
+    const coupons = await couponModel.find({isAvailable:true}, { couponName: 1, disc_Perc: 1 })
     const couponDisc = cartItems.map(item => item.couponDisc) ? cartItems.map(item => item.couponDisc) : 0
     console.log("couponDisc>>", couponDisc)
     let totalPrice = 0;
@@ -854,7 +857,6 @@ const addressAdding = async (req, res) => {
 
 //ORDER PRODUCT BY PAYING 
 const orderSuccess = async (req, res) => {
-  //console.log(req.body)
   try {
     const currentDate = new Date();
     const data = req.body
@@ -943,7 +945,8 @@ const orderSuccess = async (req, res) => {
         });
         foundUser.cart = [];
         await foundUser.save();
-        res.json({ msg: "successfully completed payment via Wallet" });
+        res.json("completed payment via Wallet")
+        //res.json({ msg: "successfully completed payment via Wallet" });
       } else {
         res.json({ msg: "Recharge your wallet" });
       }
@@ -990,6 +993,24 @@ const cancelOrder = async (req, res) => {
     const orderId = req.query.order_Id
     // console.log("productId>>", productId)
     //console.log("productName>>", productName)
+    const orderDtls = await orderModel.find({ _id: req.query.order_Id, products: { $elemMatch: { p_name: productName } } })
+    console.log("orderDtls>>", orderDtls)
+    const prodDtl = orderDtls.map(item => item.products)
+    const product = prodDtl[0].find((product) => product.p_name === productName);
+    console.log("product.realPrice>>", parseFloat(product.realPrice))
+    const paymentMethod = orderDtls[0].payment.method
+    const amount = parseFloat(orderDtls[0].payment.amount);
+    const userDtl = await usersModel.findOne({ email: req.session.user })
+    if (paymentMethod === "Wallet" && userDtl) {
+      userDtl.walletBalance += parseFloat(product.realPrice) //amount;
+     
+      userDtl.wallethistory.push({
+        process: "Refund",
+        amount: parseFloat(product.realPrice)
+      });
+      // Save the updated user document
+      await userDtl.save();
+    }
     console.log("orderId>>", orderId)
     const order = await orderModel.updateOne(
       {
@@ -1021,13 +1042,13 @@ const returnOrder = async (req, res) => {
     console.log("product.realPrice>>", parseFloat(product.realPrice))
     const paymentMethod = orderDtls[0].payment.method
     const amount = parseFloat(orderDtls[0].payment.amount);
-    const userDtl = await usersModel.findOne({ email: req.session.user })
-    if (paymentMethod === "Wallet" && userDtl) {
-      userDtl.walletBalance += parseFloat(product.realPrice) //amount;
+    // const userDtl = await usersModel.findOne({ email: req.session.user })
+    // if (paymentMethod === "Wallet" && userDtl) {
+    //   userDtl.walletBalance += parseFloat(product.realPrice) //amount;
 
-      // Save the updated user document
-      await userDtl.save();
-    }
+    //   // Save the updated user document
+    //   await userDtl.save();
+    // }
     const order = await orderModel.updateOne(
       {
         _id: orderId,

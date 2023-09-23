@@ -31,15 +31,15 @@
                                     <h6 for="" class="fw-bold ps-3 product-name" style="font-size: 13.5px;">
                                       <%=data.p_name%>
                                     </h6>
-                                    <span id="StockExceed" class="text-danger fw-bold ps-3"></span>
+                                    <span id="StockExceed-<%= index %>" class="text-danger fw-bold ps-3"></span>
                                   </div>
                                 </a>
                                 <span></span>
                               </td>
                               <td class="p-3">
                                 <div class="input-container d-flex align-items-center gap-2">
-                                  <button type="button" class="minus shadow" style="border-radius: 5px;"
-                                    onclick="decreaseQuantity(this)">
+                                  <button type="button" class="minus shadow" style="border-radius: 5px;"  data-index = "<%=index%>"
+                                    onclick="decreaseQuantity(this, '<%= index %>')">
                                     –
                                   </button>
                                   <input type="number" readonly id="quantityUpdate-<%= cartItems[index]._id %>"
@@ -48,8 +48,8 @@
                                     value="<%= cartItems.find(item => item.productId.toString() === data._id.toString()).quantity %>"
                                     style="width: 40px; border: 2px solid #020202; border-radius: 4px;"
                                     onchange="updateQuantity(this,'<%= cartItems[index]._id %>')" min="1">
-                                  <button type="button" class="plus shadow" style="border-radius: 5px;"
-                                    onclick="increaseQuantity(this)">
+                                  <button type="button" class="plus shadow" style="border-radius: 5px;"  data-index = "<%=index%>"
+                                    onclick="increaseQuantity(this, '<%= index %>')">
                                     +
                                   </button>
                                 </div>
@@ -198,43 +198,46 @@
         }
       </style>
       <script>
-        function decreaseQuantity(button) {
+        function decreaseQuantity(button,index) {
           const inputElement = button.nextElementSibling;
           console.log(inputElement)
           let quantity = +inputElement.value;
           if (quantity > 1) {
             quantity--;
             inputElement.value = quantity;
-            updateQuantity(inputElement, inputElement.getAttribute("data-item-id"));
+            updateQuantity(inputElement, inputElement.getAttribute("data-item-id"),index);
+            
           }
 
         }
-        function increaseQuantity(button) {
+        function increaseQuantity(button,index) {
           const inputElement = button.previousElementSibling;
           let quantity = +inputElement.value;
           quantity++;
           inputElement.value = quantity;
-          updateQuantity(inputElement, inputElement.getAttribute("data-item-id"));
+          updateQuantity(inputElement, inputElement.getAttribute("data-item-id"),index);
         }
-        function updateQuantity(input, itemId) {
+        function updateQuantity(input, itemId,index) {
           const cartPrice = document.getElementById(`cartPrice-${itemId}`);
           const totalPrice1 = document.getElementById('totalPrice1');
           const totalPrice2 = document.getElementById('totalPrice2');
           const discount = document.getElementById('discountPrice');
-          const StockExceed = document.getElementById('StockExceed');
+         // const StockExceed = document.getElementById('StockExceed');
+         const StockExceed = document.getElementById(`StockExceed-${index}`); // Use the unique ID
           const inputElement = input;
           let quantity = +$(input).val();
 
-          console.log("njan inputinta ala" + quantity)
+          console.log("quantity" + quantity)
           $.ajax({
             url: '/quantityUpdate/' + itemId,
             method: 'POST',
             data: { quantity: quantity },
             success: function (response) {
               const totalQuantity = response.ProQuantity
-              console.log("NJan Backend ala" + totalQuantity)
+              console.log("totalQuantity" + totalQuantity)
               cartPrice.innerText = `₹ ${response.cartPrice}`;
               totalPrice1.innerText = `₹ ${response.total}`;
+             
               //totalPrice2.innerText = `₹ ${response.grantTotal}`;
               //discount.innerText = `₹ ${response.discount}`;
               if (totalQuantity < 5 && totalQuantity > 0) {
@@ -243,35 +246,64 @@
                 setTimeout(() => {
                   StockExceed.style.display = "none";
                 }, 1000)
-              } else if (totalQuantity <= 0) {
+                const targetIndex = index; // Replace with the index you want to disable
+
+          // Select the button with the specific data-index attribute
+          const buttonToDisable = document.querySelector(`button.plus.shadow[data-index="${targetIndex}"]`);
+
+          // Disable the selected button
+          if (buttonToDisable) {
+            buttonToDisable.disabled = false;
+          }
+              } else if (totalQuantity <=1) {
                 StockExceed.style.display = "block";
                 StockExceed.innerText = "Out Of Stock";
-              }
-            },
-            error: function (error) {
-              console.log('Error updating quantity:', error);
-            }
-          });
-        }
-      </script>
-      <script>
-        function validateCart(count) {
-          // Convert count to a number
-          var cartCount = parseInt(count);
-      
-          if (cartCount === 0) {
-            // Cart is empty, show a SweetAlert2 alert
-            swal({
-              icon: 'error',
-              title: 'Cart is empty!',
-              text: 'Please add items to the cart before checking out.',
-              confirmButtonText: 'OK'
-            });
-            return false; // Prevent form submission
-          } else {
-            // Cart is not empty, allow form submission
-            return true;
+                setTimeout(() => {
+                  StockExceed.style.display = "none";
+                }, 1000)
+                const targetIndex = index; // Replace with the index you want to disable
+
+          // Select the button with the specific data-index attribute
+          const buttonToDisable = document.querySelector(`button.plus.shadow[data-index="${targetIndex}"]`);
+
+          // Disable the selected button
+          if (buttonToDisable) {
+            buttonToDisable.disabled = true;
           }
-        }
-      </script>
+
+      //document.querySelector(".plus.shadow").disabled = true;
+      //document.querySelector(`button[data-item-index="${index}"].plus`).disabled = true;
+
+        // Disable the plus button associated with this item
+      // const plusButton = document.querySelector(`button[data-item-index="${index}"].plus`);
+      // plusButton.disabled = true;
+    }
+  },
+  error: function (error) {
+    console.log('Error updating quantity:', error);
+  }
+});
+
+  }
+</script>
+<script>
+  function validateCart(count) {
+    // Convert count to a number
+    var cartCount = parseInt(count);
+
+    if (cartCount === 0) {
+      // Cart is empty, show a SweetAlert2 alert
+      swal({
+        icon: 'error',
+        title: 'Cart is empty!',
+        text: 'Please add items to the cart before checking out.',
+        confirmButtonText: 'OK'
+      });
+      return false; // Prevent form submission
+    } else {
+      // Cart is not empty, allow form submission
+      return true;
+    }
+  }
+</script>
      

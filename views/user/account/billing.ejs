@@ -350,6 +350,11 @@
                                                     // Optionally, you can redirect the user to another page after successful submission
                                                     window.location.href = "/success";
                                                 }
+                                                else if (response === 'completed payment via Wallet') {
+                                                    // Optionally, you can redirect the user to another page after successful submission
+                                                    window.location.href = "/success";
+                                                }
+
                                                 else {
                                                     alert(response.msg)
                                                 }
